@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xác Nhận Đơn Hàng</title>
+</head>
+<body>
+<h1>Xác Nhận Đơn Hàng Thành Công</h1>
+
+<h3>Thông Tin Khách Hàng</h3>
+<p><strong>Tên khách hàng:</strong> ${khachHang.ten}</p>
+<p><strong>Email:</strong> ${khachHang.email}</p>
+<p><strong>Số điện thoại:</strong> ${khachHang.soDienThoai}</p>
+
+<h3>Thông Tin Đơn Hàng</h3>
+<p><strong>Ngày đặt hàng:</strong> ${#dates.format(ngayDatHang, 'dd-MM-yyyy HH:mm')}</p>
+<p><strong>Địa chỉ giao hàng:</strong> ${khachHang.diaChi}</p>
+
+<h3>Sản Phẩm Mua</h3>
+<table>
+    <thead>
+    <tr>
+        <th>Sản phẩm</th>
+        <th>Đơn giá</th>
+        <th>Số lượng</th>
+        <th>Tổng</th>
+    </tr>
+    </thead>
+    <tbody>
+    <th:block th:each="chiTiet : ${dsSanPham}">
+        <tr>
+            <td th:text="${chiTiet.spChiTiet.ten}"></td>
+            <td th:text="${chiTiet.spChiTiet.donGia}"></td>
+            <td th:text="${chiTiet.soLuong}"></td>
+            <td th:text="${chiTiet.spChiTiet.donGia * chiTiet.soLuong}"></td>
+        </tr>
+    </th:block>
+    </tbody>
+</table>
+
+<h3>Tổng Tiền</h3>
+<p><strong>Tổng tiền hàng:</strong> ${tongTienHang} VND</p>
+<p><strong>Tổng tiền sau giảm:</strong> ${tongTienSauGiam} VND</p>
+<p><strong>Điểm tích lũy còn lại:</strong> ${diemTichLuy}</p>
+
+<p><strong>Đặt hàng thành công! Cảm ơn bạn đã mua sắm.</strong></p>
+
+</body>
+</html>

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chi Tiết Sản Phẩm - Ralph Lauren</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .nav-link-custom:hover {
+      color: #ffc107 !important;
+    }
+
+    .card {
+      border: none;
+      border-radius: 1rem;
+      background-color: #fff;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+
+    .carousel-inner img {
+      border-radius: 0.75rem;
+      object-fit: cover;
+      max-height: 500px;
+    }
+
+    .custom-carousel-btn {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      width: 48px;
+      height: 48px;
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .custom-carousel-btn:hover {
+      background-color: rgba(0, 0, 0, 0.8);
+      color: #ffc107;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    .carousel-control-prev {
+      left: -30px;
+    }
+
+    .carousel-control-next {
+      right: -30px;
+    }
+
+    .btn-primary {
+      background-color: #004080;
+      border: none;
+    }
+
+    .btn-primary:hover {
+      background-color: #003366;
+    }
+
+    .btn-outline-secondary:hover {
+      background-color: #f1f1f1;
+    }
+    /* Đảm bảo ảnh có kích thước đồng đều và được căn giữa */
+    .product-image {
+      width: 100%;  /* Làm cho ảnh chiếm toàn bộ chiều rộng của card */
+      height: 250px; /* Đặt chiều cao cố định cho ảnh */
+      object-fit: cover; /* Giữ tỷ lệ ảnh và cắt ảnh nếu cần */
+    }
+
+    /* Card body: Căn chỉnh thẻ nội dung */
+    .card-body {
+      padding: 1rem;
+    }
+
+    /* Nút "Xem chi tiết" */
+    .hover-btn {
+      margin-top: auto; /* Đẩy nút xuống dưới cùng của card */
+      text-transform: uppercase;
+      padding: 0.6rem 1rem;
+      font-weight: bold;
+    }
+
+    /* Đảm bảo các phần tử trong card đều có chiều cao đồng đều */
+    .card {
+      display: flex;
+      flex-direction: column; /* Đảm bảo các phần tử trong card nằm dọc */
+      justify-content: space-between; /* Căn giữa và tạo khoảng cách giữa các phần tử */
+    }
+
+    .card-title {
+      font-size: 1rem; /* Điều chỉnh kích thước tiêu đề */
+      margin-bottom: 1rem; /* Tạo khoảng cách giữa tiêu đề và nút */
+    }
+
+  </style>
+</head>
+<body>
+<div th:if="${message}" class="alert alert-warning">
+  <span th:text="${message}"></span>
+</div>
+<!-- Modal Đăng nhập -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title" id="loginModalLabel">Đăng nhập khách hàng</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/ralph-lauren/dang-nhap" method="post">
+          <div class="mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" name="email" class="form-control" id="email" required>
+          </div>
+          <div class="mb-3">
+            <label for="matKhau" class="form-label">Mật khẩu:</label>
+            <input type="password" name="matKhau" class="form-control" id="matKhau" required>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-dark">Đăng nhập</button>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer justify-content-between">
+        <a href="/khach-hang/quen-mat-khau" class="text-muted small">Quên mật khẩu?</a>
+        <a href="#" class="text-muted small" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#registerModal">Chưa có tài khoản?</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Đăng ký -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title" id="registerModalLabel">Đăng ký tài khoản</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/ralph-lauren/dang-ky" method="post">
+          <div class="mb-3">
+            <label for="hoTen" class="form-label">Họ tên:</label>
+            <input type="text" name="hoTen" class="form-control" id="hoTen" required>
+          </div>
+          <div class="mb-3">
+            <label for="emailDangKy" class="form-label">Email:</label>
+            <input type="email" name="email" class="form-control" id="emailDangKy" required>
+          </div>
+          <div class="mb-3">
+            <label for="matKhauDangKy" class="form-label">Mật khẩu:</label>
+            <input type="password" name="matKhau" class="form-control" id="matKhauDangKy" required>
+          </div>
+          <div class="mb-3">
+            <label for="sdt" class="form-label">Số điện thoại:</label>
+            <input type="text" name="sdt" class="form-control" id="sdt" required>
+          </div>
+          <div class="d-grid">
+            <button type="submit" class="btn btn-dark">Đăng ký</button>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer justify-content-end">
+        <a href="#" class="text-muted small" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#loginModal">Đã có tài khoản?</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Header -->
+<header class="bg-dark text-white shadow-sm">
+  <div class="container py-3 d-flex justify-content-between align-items-center">
+    <a href="/ralph-lauren/trang-chu" class="logo text-white text-decoration-none">
+      <h3 class="m-0 fw-bold">Ralph Lauren</h3>
+    </a>
+    <nav>
+      <ul class="d-flex list-unstyled mb-0 align-items-center">
+        <li class="mx-3">
+          <a href="/ralph-lauren/san-pham" class="text-white text-decoration-none nav-link-custom">Sản phẩm</a>
+        </li>
+        <li class="mx-3">
+          <a href="#about" class="text-white text-decoration-none nav-link-custom">Giới thiệu</a>
+        </li>
+
+        <!-- Nếu chưa đăng nhập -->
+        <li class="mx-3" th:if="${session.khachHang == null}">
+          <a href="#" class="text-white text-decoration-none nav-link-custom" data-bs-toggle="modal" data-bs-target="#loginModal">Đăng nhập</a>
+        </li>
+
+        <!-- Nếu đã đăng nhập -->
+        <li class="nav-item dropdown mx-3" th:if="${session.khachHang != null}">
+          <a class="nav-link dropdown-toggle d-flex align-items-center text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle me-2"></i>
+            <span th:text="'Xin chào, ' + ${session.khachHang.ten}">Khách</span>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="userDropdown">
+            <li>
+              <a class="dropdown-item d-flex align-items-center" href="/ralph-lauren/thong-tin-khach-hang">
+                <i class="bi bi-info-circle me-2 text-primary"></i> Thông tin cá nhân
+              </a>
+            </li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <a class="dropdown-item d-flex align-items-center text-danger" href="/ralph-lauren/dang-xuat">
+                <i class="bi bi-box-arrow-right me-2"></i> Đăng xuất
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Giỏ hàng -->
+        <li class="mx-3 position-relative">
+          <a href="/ralph-lauren/gio-hang" class="text-white text-decoration-none nav-link-custom d-flex align-items-center">
+            <i class="bi bi-cart-fill me-1"></i> Giỏ hàng
+            <span class="badge bg-warning text-dark ms-1" id="cart-count" th:text="${soLuongSanPham}">0</span>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+  </div>
+</header>
+<!-- Hiển thị thông báo thành công -->
+<div th:if="${success}">
+  <div class="alert alert-success" id="success-message">
+    <p th:text="${success}"></p>
+  </div>
+</div>
+
+<!-- Hiển thị thông báo lỗi -->
+<div th:if="${error}">
+  <div class="alert alert-danger" id="error-message">
+    <p th:text="${error}"></p>
+  </div>
+</div>
+
+<!-- Giỏ hàng và các thông tin khác -->
+
+<!-- Chi tiết sản phẩm -->
+<div class="container mt-5">
+  <h2 class="text-center fw-bold mb-4 text-uppercase">Chi Tiết Sản Phẩm</h2>
+  <div class="row align-items-center">
+    <!-- Hình ảnh sản phẩm -->
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm p-3">
+        <div th:if="${spChiTiet.hinhAnhList != null and !spChiTiet.hinhAnhList.isEmpty()}">
+          <div id="carouselProductImages" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item"
+                   th:each="hinhAnh, iterStat : ${spChiTiet.hinhAnhList}"
+                   th:classappend="${iterStat.index == 0} ? 'active'">
+                <img th:src="@{${hinhAnh.url}}" class="d-block w-100 rounded img-fluid" alt="Ảnh sản phẩm">
+              </div>
+            </div>
+            <button class="carousel-control-prev custom-carousel-btn" type="button" data-bs-target="#carouselProductImages" data-bs-slide="prev">
+              <i class="bi bi-chevron-left fs-3"></i>
+            </button>
+            <button class="carousel-control-next custom-carousel-btn" type="button" data-bs-target="#carouselProductImages" data-bs-slide="next">
+              <i class="bi bi-chevron-right fs-3"></i>
+            </button>
+          </div>
+        </div>
+        <div th:if="${spChiTiet.hinhAnhList == null or spChiTiet.hinhAnhList.isEmpty()}">
+          <img src="/images/default-image.jpg" class="img-fluid rounded" alt="Ảnh mặc định">
+        </div>
+      </div>
+    </div>
+
+    <!-- Thông tin sản phẩm -->
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm p-4 h-100 d-flex flex-column justify-content-between">
+        <div>
+          <h3 th:text="${spChiTiet.getTen()}" class="fw-bold mb-3 text-primary text-uppercase">Tên sản phẩm</h3>
+          <p><strong>Màu sắc:</strong> <span th:text="${spChiTiet.mauSac.ten}"></span></p>
+          <p><strong>Size:</strong> <span th:text="${spChiTiet.kichThuoc.ten}">M</span></p>
+          <p><strong>Số lượng còn:</strong> <span th:text="${spChiTiet.soLuong}"></span></p>
+          <p><strong>Đơn giá:</strong>
+            <span class="text-danger fs-5 fw-bold"
+                  th:text="${#numbers.formatDecimal(spChiTiet.donGia, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></span>
+          </p>
+          <p>
+            <strong>Trạng thái:</strong>
+            <span th:text="${spChiTiet.trangThai ? 'Còn hàng' : 'Hết hàng'}"
+                  th:classappend="${spChiTiet.trangThai ? 'text-success fw-bold' : 'text-danger fw-bold'}"></span>
+          </p>
+
+          <!-- Kiểm tra trạng thái đăng nhập -->
+          <div th:if="${session.khachHang == null}">
+            <p class="alert alert-info">Vui lòng đăng nhập để thêm sản phẩm vào giỏ hoặc mua ngay.</p>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">Đăng nhập ngay</button>
+          </div>
+
+          <!-- Form chọn số lượng, hiển thị khi đã đăng nhập -->
+          <!-- Form chọn số lượng, hiển thị khi đã đăng nhập -->
+          <div th:if="${session.khachHang != null}">
+            <form method="post" action="/ralph-lauren/gio-hang/them" class="mb-3">
+              <input type="hidden" name="spChiTietId" th:value="${spChiTiet.id}" />
+              <div class="mb-3">
+                <label for="soLuong" class="form-label fw-bold">Số lượng:</label>
+                <input type="number" class="form-control" id="soLuong" name="soLuong" min="1"
+                       th:attr="max=${spChiTiet.soLuong}" value="1" required />
+              </div>
+              <div class="d-flex justify-content-between gap-2">
+                <button type="submit" class="btn btn-primary w-50">
+                  <i class="bi bi-cart-plus"></i> Thêm vào giỏ
+                </button>
+              </div>
+            </form>
+
+            <!-- Form Mua ngay tách riêng -->
+            <form th:action="@{/ralph-lauren/mua-ngay}" method="post" class="w-100">
+              <input type="hidden" name="spChiTietId" th:value="${spChiTiet.id}" />
+              <input type="hidden" name="soLuong" value="1" />
+              <button type="submit" class="btn btn-success w-100">
+                <i class="bi bi-cash-stack"></i> Mua ngay
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Nút quay lại -->
+        <div class="mt-4">
+          <a href="/ralph-lauren/san-pham" class="btn btn-outline-secondary w-100">
+            <i class="bi bi-arrow-left"></i> Quay lại danh sách
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- Sản phẩm nổi bật -->
+<h4 class="mt-5 mb-3 fw-bold text-center text-uppercase">Sản phẩm nổi bật</h4>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-3 mb-4" th:each="sp : ${sanPhamNoiBat}">
+      <div class="card shadow-sm h-100">
+        <!-- Kiểm tra nếu có ít nhất 1 sản phẩm chi tiết và 1 hình ảnh -->
+        <img th:if="${sp.danhSachChiTiet != null and !sp.danhSachChiTiet.isEmpty() and sp.danhSachChiTiet[0].hinhAnhList != null and !sp.danhSachChiTiet[0].hinhAnhList.isEmpty()}"
+             th:src="@{${sp.danhSachChiTiet[0].hinhAnhList[0].url}}"
+             class="card-img-top product-image" alt="Ảnh sản phẩm">
+        <!-- Nếu không có ảnh, hiển thị ảnh mặc định -->
+        <img th:unless="${sp.danhSachChiTiet != null and !sp.danhSachChiTiet.isEmpty() and sp.danhSachChiTiet[0].hinhAnhList != null and !sp.danhSachChiTiet[0].hinhAnhList.isEmpty()}"
+             src="/images/default-image.jpg"
+             class="card-img-top product-image" alt="Ảnh sản phẩm mặc định">
+        <div class="card-body text-center d-flex flex-column">
+          <h6 class="card-title text-uppercase fw-bold" th:text="${sp.ten}">Tên SP</h6>
+
+          <!-- Dẫn link đến sản phẩm chi tiết đầu tiên -->
+          <a th:if="${sp.danhSachChiTiet != null and !sp.danhSachChiTiet.isEmpty()}"
+             th:href="@{/ralph-lauren/san-pham/{id}(id=${sp.danhSachChiTiet[0].id})}"
+             class="btn btn-outline-dark mt-auto hover-btn">Xem chi tiết</a>
+
+          <!-- Nếu không có chi tiết sản phẩm thì không hiện nút -->
+          <span th:unless="${sp.danhSachChiTiet != null and !sp.danhSachChiTiet.isEmpty()}"
+                class="text-muted mt-auto">Không có chi tiết</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white mt-5">
+  <div class="container py-4 text-center">
+    <p>&copy; 2025 Ralph Lauren. Tất cả các quyền được bảo lưu.</p>
+  </div>
+</footer>
+<script>
+  document.querySelector('form').addEventListener('submit', function (e) {
+    const sizeValue = document.getElementById('sizeSelect').value;
+    const soLuongValue = document.getElementById('soLuong').value;
+    document.getElementById('selectedSize').value = sizeValue;
+    document.getElementById('selectedSoLuong').value = soLuongValue;
+  });
+</script>
+<!-- Thêm JavaScript để tự động ẩn thông báo sau 3 giây -->
+<script>
+  // Kiểm tra nếu có thông báo thành công
+  const successMessage = document.getElementById('success-message');
+  if (successMessage) {
+    setTimeout(function() {
+      successMessage.style.display = 'none';
+    }, 3000);  // 3000ms = 3s
+  }
+
+  // Kiểm tra nếu có thông báo lỗi
+  const errorMessage = document.getElementById('error-message');
+  if (errorMessage) {
+    setTimeout(function() {
+      errorMessage.style.display = 'none';
+    }, 3000);  // 3000ms = 3s
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

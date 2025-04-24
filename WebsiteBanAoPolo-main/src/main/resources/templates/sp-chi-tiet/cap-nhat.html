@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cập nhật chi tiết sản phẩm</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: linear-gradient(to right, #e3f2fd, #ffffff);
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .sidebar {
+            height: 100vh;
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #3b3737;
+            padding: 20px 10px;
+            border-right: 1px solid #444;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 10px 15px;
+            color: #fff;
+            text-decoration: none;
+            transition: 0.3s;
+            border-radius: 5px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background-color: #444;
+            color: #fff;
+        }
+
+        .dropdown-content {
+            display: none;
+            padding-left: 15px;
+        }
+
+        .dropdown-content a {
+            font-size: 14px;
+            padding: 8px 15px;
+            color: #ddd;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #555;
+            color: #fff;
+        }
+
+        .dropdown-content.show {
+            display: block;
+        }
+
+        .content-section {
+            margin-left: 260px;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .preview-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="text-center pb-3">
+        <a href="/trang-chu">
+            <img src="/image/logo.png" alt="Logo" style="max-width: 120px;">
+        </a>
+    </div>
+
+    <a href="/trang-chu">🏠 Trang chủ</a>
+    <a href="/ban-hang">🛒 Bán hàng</a>
+    <a href="/nhan-vien">👤 Nhân viên</a>
+    <a href="/khach-hang">🧑‍💼 Khách hàng</a>
+
+    <div class="dropdown">
+        <a href="#" onclick="toggleDropdown('dropdownSanPham')">👕 Sản phẩm ▼</a>
+        <div id="dropdownSanPham" class="dropdown-content">
+            <a href="/san-pham">📄 Danh sách sản phẩm</a>
+            <a href="/san-pham-chi-tiet">📋 Sản phẩm chi tiết</a>
+            <a href="/kich-thuoc">📐 Size</a>
+            <a href="/mau-sac">🎨 Màu</a>
+            <a href="/thuong-hieu">🏷️ Thương hiệu</a>
+        </div>
+    </div>
+
+    <div class="dropdown">
+        <a href="#" onclick="toggleDropdown('dropdownKhuyenMai')">🎁 Khuyến mại ▼</a>
+        <div id="dropdownKhuyenMai" class="dropdown-content">
+            <a href="/khuyen-mai">📢 Chương trình khuyến mại</a>
+            <a href="/khuyen-mai-san-pham">🛍️ Danh sách sản phẩm khuyến mại</a>
+        </div>
+    </div>
+
+    <a href="/hoa-don/view">🧾 Hóa đơn</a>
+    <a href="/thong-ke">📊 Thống kê</a>
+</div>
+
+<!-- Main Content -->
+<div class="content-section">
+    <div class="container mt-4">
+        <h1 class="mb-4">Cập nhật chi tiết sản phẩm</h1>
+
+        <!-- Thông báo -->
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <!-- Form -->
+        <form th:action="@{/san-pham-chi-tiet/sua/{id}(id=${spChiTiet.id})}" th:object="${spChiTiet}" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="mb-3">
+                <label class="form-label">Mã chi tiết sản phẩm</label>
+                <input type="text" class="form-control" th:field="*{maSPCT}" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Sản phẩm</label>
+                <select class="form-select" th:field="*{sanPham}" required>
+                    <option value="">-- Chọn sản phẩm --</option>
+                    <option th:each="sp : ${sanPhams}" th:value="${sp.id}" th:text="${sp.ten}"></option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Màu sắc</label>
+                <select class="form-select" th:field="*{mauSac}" required>
+                    <option value="">-- Chọn màu sắc --</option>
+                    <option th:each="ms : ${mauSacs}" th:value="${ms.id}" th:text="${ms.ten}"></option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Kích thước</label>
+                <select class="form-select" th:field="*{kichThuoc}" required>
+                    <option value="">-- Chọn kích thước --</option>
+                    <option th:each="kt : ${kichThuocs}" th:value="${kt.id}" th:text="${kt.ten}"></option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Số lượng</label>
+                <input type="number" class="form-control" th:field="*{soLuong}" min="0">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Đơn giá (VNĐ)</label>
+                <input type="number" class="form-control" th:field="*{donGia}" min="0" step="1000" required>
+            </div>
+
+            <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" th:field="*{trangThai}">
+                <label class="form-check-label">Trạng thái hoạt động</label>
+            </div>
+
+            <!-- Upload ảnh mới -->
+            <div class="mb-3">
+                <label for="files" class="form-label">Hình ảnh sản phẩm</label>
+                <input type="file" class="form-control" id="files" name="files" accept="image/*" multiple>
+                <div class="form-text">Chọn một hoặc nhiều ảnh (JPEG, PNG...)</div>
+
+                <!-- Hiển thị preview ảnh mới -->
+                <div id="previewContainer" class="mt-3 d-flex flex-wrap gap-2"></div>
+            </div>
+
+
+            <!-- Hiển thị ảnh hiện tại + checkbox xóa -->
+            <div th:if="${hinhAnhList != null}">
+                <label>Ảnh hiện tại:</label>
+                <div class="d-flex flex-wrap">
+                    <div th:each="img : ${hinhAnhList}" class="me-3 text-center">
+                        <!-- Sửa ở đây -->
+                        <img th:src="${img.url}" alt="Ảnh sản phẩm" style="width: 100px; height: 100px; object-fit: cover;" class="img-thumbnail" />
+                        <div>
+                            <input type="checkbox" th:name="xoaAnhIds" th:value="${img.id}" th:id="'img-' + ${img.id}" />
+                            <label th:for="'img-' + ${img.id}" class="text-danger small">Xóa ảnh</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                <a th:href="@{/san-pham-chi-tiet}" class="btn btn-secondary">Hủy</a>
+            </div>
+        </form>
+
+    </div>
+</div>
+<script>
+    document.getElementById('files').addEventListener('change', function(event) {
+        const previewContainer = document.getElementById('previewContainer');
+        previewContainer.innerHTML = ''; // Xóa ảnh cũ nếu có
+
+        const files = event.target.files;
+
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'img-thumbnail';
+                    img.style.maxHeight = '120px';
+                    img.style.width = 'auto';
+                    previewContainer.appendChild(img);
+                };
+
+                reader.readAsDataURL(file);
+            }
+        }
+    });
+</script>
+
+<script>
+    document.getElementById('fileHinhAnh').addEventListener('change', function (e) {
+        const previewContainer = document.getElementById('previewContainer');
+        previewContainer.innerHTML = '';
+        for (let file of e.target.files) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const img = document.createElement('img');
+                img.src = event.target.result;
+                img.style.width = '100px';
+                img.style.height = '100px';
+                img.style.objectFit = 'cover';
+                img.className = 'img-thumbnail';
+                previewContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+
+<script>
+    function toggleDropdown(id) {
+        const dropdown = document.getElementById(id);
+        dropdown.classList.toggle("show");
+    }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

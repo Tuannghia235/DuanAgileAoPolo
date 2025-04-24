@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chi Tiết Sản Phẩm - Ralph Lauren</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .nav-link-custom:hover {
+            color: #ffc107 !important;
+        }
+
+        .card {
+            border: none;
+            border-radius: 1rem;
+            background-color: #fff;
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+
+        .carousel-inner img {
+            border-radius: 0.75rem;
+            object-fit: cover;
+            max-height: 500px;
+        }
+
+        .custom-carousel-btn {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            width: 48px;
+            height: 48px;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .custom-carousel-btn:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #ffc107;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .carousel-control-prev {
+            left: -30px;
+        }
+
+        .carousel-control-next {
+            right: -30px;
+        }
+
+        .btn-primary {
+            background-color: #004080;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #003366;
+        }
+
+        .btn-outline-secondary:hover {
+            background-color: #f1f1f1;
+        }
+        /* Đảm bảo ảnh có kích thước đồng đều và được căn giữa */
+        .product-image {
+            width: 100%;  /* Làm cho ảnh chiếm toàn bộ chiều rộng của card */
+            height: 250px; /* Đặt chiều cao cố định cho ảnh */
+            object-fit: cover; /* Giữ tỷ lệ ảnh và cắt ảnh nếu cần */
+        }
+
+        /* Card body: Căn chỉnh thẻ nội dung */
+        .card-body {
+            padding: 1rem;
+        }
+
+        /* Nút "Xem chi tiết" */
+        .hover-btn {
+            margin-top: auto; /* Đẩy nút xuống dưới cùng của card */
+            text-transform: uppercase;
+            padding: 0.6rem 1rem;
+            font-weight: bold;
+        }
+
+        /* Đảm bảo các phần tử trong card đều có chiều cao đồng đều */
+        .card {
+            display: flex;
+            flex-direction: column; /* Đảm bảo các phần tử trong card nằm dọc */
+            justify-content: space-between; /* Căn giữa và tạo khoảng cách giữa các phần tử */
+        }
+
+        .card-title {
+            font-size: 1rem; /* Điều chỉnh kích thước tiêu đề */
+            margin-bottom: 1rem; /* Tạo khoảng cách giữa tiêu đề và nút */
+        }
+
+    </style>
+</head>
+<body>
+<!-- Modal Đăng nhập -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="loginModalLabel">Đăng nhập khách hàng</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/ralph-lauren/dang-nhap" method="post">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" name="email" class="form-control" id="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="matKhau" class="form-label">Mật khẩu:</label>
+                        <input type="password" name="matKhau" class="form-control" id="matKhau" required>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-dark">Đăng nhập</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <a href="/khach-hang/quen-mat-khau" class="text-muted small">Quên mật khẩu?</a>
+                <a href="#" class="text-muted small" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#registerModal">Chưa có tài khoản?</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Đăng ký -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-dark text-white">
+                <h5 class="modal-title" id="registerModalLabel">Đăng ký tài khoản</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/ralph-lauren/dang-ky" method="post">
+                    <div class="mb-3">
+                        <label for="hoTen" class="form-label">Họ tên:</label>
+                        <input type="text" name="hoTen" class="form-control" id="hoTen" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="emailDangKy" class="form-label">Email:</label>
+                        <input type="email" name="email" class="form-control" id="emailDangKy" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="matKhauDangKy" class="form-label">Mật khẩu:</label>
+                        <input type="password" name="matKhau" class="form-control" id="matKhauDangKy" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="sdt" class="form-label">Số điện thoại:</label>
+                        <input type="text" name="sdt" class="form-control" id="sdt" required>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-dark">Đăng ký</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer justify-content-end">
+                <a href="#" class="text-muted small" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#loginModal">Đã có tài khoản?</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Header -->
+<header class="bg-dark text-white shadow-sm">
+    <div class="container py-3 d-flex justify-content-between align-items-center">
+        <a href="/ralph-lauren/trang-chu" class="logo text-white text-decoration-none">
+            <h3 class="m-0 fw-bold">Ralph Lauren</h3>
+        </a>
+        <nav>
+            <ul class="d-flex list-unstyled mb-0 align-items-center">
+                <li class="mx-3">
+                    <a href="/ralph-lauren/san-pham" class="text-white text-decoration-none nav-link-custom">Sản phẩm</a>
+                </li>
+                <li class="mx-3">
+                    <a href="#about" class="text-white text-decoration-none nav-link-custom">Giới thiệu</a>
+                </li>
+
+                <!-- Nếu chưa đăng nhập -->
+                <li class="mx-3" th:if="${session.khachHang == null}">
+                    <a href="#" class="text-white text-decoration-none nav-link-custom" data-bs-toggle="modal" data-bs-target="#loginModal">Đăng nhập</a>
+                </li>
+
+                <!-- Nếu đã đăng nhập -->
+                <li class="nav-item dropdown mx-3" th:if="${session.khachHang != null}">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle me-2"></i>
+                        <span th:text="'Xin chào, ' + ${session.khachHang.ten}">Khách</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm" aria-labelledby="userDropdown">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="/ralph-lauren/thong-tin-khach-hang">
+                                <i class="bi bi-info-circle me-2 text-primary"></i> Thông tin cá nhân
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center text-danger" href="/ralph-lauren/dang-xuat">
+                                <i class="bi bi-box-arrow-right me-2"></i> Đăng xuất
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Giỏ hàng -->
+                <li class="mx-3 position-relative">
+                    <a href="/ralph-lauren/gio-hang" class="text-white text-decoration-none nav-link-custom d-flex align-items-center">
+                        <i class="bi bi-cart-fill me-1"></i> Giỏ hàng
+                        <span class="badge bg-warning text-dark ms-1" id="cart-count" th:text="${soLuongSanPham}">0</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<!-- Hiển thị thông báo thành công -->
+<div th:if="${success}">
+    <div class="alert alert-success" id="success-message">
+        <p th:text="${success}"></p>
+    </div>
+</div>
+
+<!-- Hiển thị thông báo lỗi -->
+<div th:if="${error}">
+    <div class="alert alert-danger" id="error-message">
+        <p th:text="${error}"></p>
+    </div>
+</div>
+<!-- GIỎ HÀNG -->
+<div class="container my-5">
+    <h2 class="mb-4 text-center text-uppercase fw-bold">Giỏ hàng</h2>
+
+    <!-- Nếu chưa đăng nhập -->
+    <div th:if="${session.khachHang == null}" class="alert alert-warning text-center">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        Vui lòng <a href="#" class="fw-bold text-decoration-underline" data-bs-toggle="modal" data-bs-target="#loginModal">đăng nhập</a> để xem giỏ hàng của bạn.
+    </div>
+
+    <!-- Nếu đã đăng nhập nhưng giỏ hàng trống -->
+    <div th:if="${session.khachHang != null and (dsSanPham == null or #lists.isEmpty(dsSanPham))}" class="text-center">
+        <p class="text-muted">Giỏ hàng hiện đang trống.</p>
+    </div>
+
+    <!-- Nếu đã đăng nhập và có sản phẩm trong giỏ -->
+    <div th:if="${session.khachHang != null and dsSanPham != null and !#lists.isEmpty(dsSanPham)}">
+        <table class="table table-bordered align-middle text-center">
+            <thead class="table-dark">
+            <tr>
+                <th scope="col">Ảnh</th>
+                <th scope="col">Tên sản phẩm</th>
+                <th scope="col">Màu</th>
+                <th scope="col">Size</th>
+                <th scope="col">Đơn giá</th>
+                <th scope="col">Số lượng</th>
+                <th scope="col">Thành tiền</th>
+                <th scope="col">Hành động</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="spct : ${dsSanPham}">
+                <td>
+                    <img th:if="${spct.spChiTiet.hinhAnhList != null and !#lists.isEmpty(spct.spChiTiet.hinhAnhList)}"
+                         th:src="@{${spct.spChiTiet.hinhAnhList[0].url}}"
+                         alt="ảnh sản phẩm" width="80" height="80" class="img-thumbnail" />
+                </td>
+                <td th:text="${spct.spChiTiet.sanPham.ten}">Tên sản phẩm</td>
+                <td th:text="${spct.spChiTiet.mauSac.ten}">Màu</td>
+                <td th:text="${spct.spChiTiet.kichThuoc.ten}">Size</td>
+                <td th:text="${#numbers.formatDecimal(spct.spChiTiet.donGia, 0, 'COMMA', 0, 'POINT')} + ' ₫'">0 ₫</td>
+                <td>
+                    <form th:action="@{/ralph-lauren/gio-hang/cap-nhat}" method="post">
+                        <input type="hidden" name="idGioHangCT" th:value="${spct.id}" />
+                        <input type="number" name="soLuongMoi" th:value="${spct.soLuong}" min="0"
+                               style="width: 60px; text-align: center;"
+                               onchange="this.form.submit()" />
+                    </form>
+                </td>
+                <td th:text="${#numbers.formatDecimal(spct.soLuong * spct.spChiTiet.donGia, 0, 'COMMA', 0, 'POINT')} + ' ₫'">0 ₫</td>
+                <td>
+                    <form th:action="@{/ralph-lauren/gio-hang/xoa}" method="post">
+                        <input type="hidden" name="idSPCT" th:value="${spct.spChiTiet.id}" />
+                        <button type="submit" class="btn btn-danger"
+                                onclick="return confirm('Xác nhận xóa sản phẩm này khỏi giỏ hàng?')">
+                            <i class="bi bi-trash3-fill"></i> Xóa
+                        </button>
+                    </form>
+                </td>
+
+            </tr>
+
+
+            </tbody>
+        </table>
+
+        <!-- Tổng tiền -->
+        <div class="text-end mt-4">
+            <h5 class="fw-bold">
+                Tổng tiền:
+                <span class="text-danger" th:text="${#numbers.formatDecimal(tongTien, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></span>
+            </h5>
+        </div>
+
+        <!-- Nút thanh toán -->
+        <form th:action="@{/ralph-lauren/thanh-toan}" method="get">
+            <button class="btn btn-success mt-3" type="submit">
+                <i class="bi bi-credit-card"></i> Thanh toán
+            </button>
+        </form>
+
+
+    </div>
+</div>
+<div th:if="${error != null}">
+    <p style="color: red;" th:text="${error}"></p>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white mt-5">
+    <div class="container py-4 text-center">
+        <p>&copy; 2025 Ralph Lauren. Tất cả các quyền được bảo lưu.</p>
+    </div>
+</footer>
+<script>
+    function updateCartOnAction() {
+        $.get("/ralph-lauren/gio-hang/so-luong", function(data) {
+            $('#cart-count').text(data); // Cập nhật lại số lượng giỏ hàng
+        });
+    }
+</script>
+
+<script>
+    document.querySelector('form').addEventListener('submit', function (e) {
+        const sizeValue = document.getElementById('sizeSelect').value;
+        const soLuongValue = document.getElementById('soLuong').value;
+        document.getElementById('selectedSize').value = sizeValue;
+        document.getElementById('selectedSoLuong').value = soLuongValue;
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
