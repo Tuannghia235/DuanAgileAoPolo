@@ -1,6 +1,5 @@
 package org.example.registerpolo.Repository;
 
-import org.example.registerpolo.Entity.HinhAnhSPChiTiet; // Giữ import này nếu bạn có methods liên quan đến HinhAnhSPChiTiet ở đây (dù thường là ở Repo riêng)
 import org.example.registerpolo.Entity.SPChiTiet;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,12 +9,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
+// import java.util.Optional; // Không cần import Optional vì findById đã có sẵn
 
 @Repository
 public interface SPChiTietRepo extends JpaRepository<SPChiTiet, Integer> {
 
-    // Phương thức này có vẻ hơi thừa so với findAllWithFilters nếu chỉ dùng cho list view
+    boolean existsByMaSPCT(String maSPCT); // Thêm hàm kiểm tra tồn tại mã SPCT
+    boolean existsByMaSPCTAndIdNot(String maSPCT, Integer id); // Thêm hàm kiểm tra tồn tại mã SPCT khác ID hiện tại
+
+
     @Query("SELECT sp FROM SPChiTiet sp WHERE " +
             "(:keyword IS NULL OR LOWER(sp.maSPCT) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "OR LOWER(sp.sanPham.ten) LIKE LOWER(CONCAT('%', :keyword, '%'))) AND " +
@@ -25,21 +27,20 @@ public interface SPChiTietRepo extends JpaRepository<SPChiTiet, Integer> {
                                   @Param("mau") Integer mau,
                                   @Param("size") Integer size);
 
-    // FIX: Bổ sung điều kiện lọc theo thuongHieuId và cải thiện điều kiện tìm kiếm
-    @Query("SELECT sp FROM SPChiTiet sp WHERE " +
-            "(:search IS NULL OR LOWER(sp.maSPCT) LIKE LOWER(CONCAT('%', :search, '%')) " + // Tìm theo mã SPCT
-            "OR LOWER(sp.sanPham.ten) LIKE LOWER(CONCAT('%', :search, '%'))) AND " + // Tìm theo tên SP (case-insensitive)
-            "(:mauSacId IS NULL OR sp.mauSac.id = :mauSacId) AND " +
-            "(:kichThuocId IS NULL OR sp.kichThuoc.id = :kichThuocId) AND " +
-            "(:thuongHieuId IS NULL OR sp.sanPham.thuongHieu.id = :thuongHieuId)") // THÊM: Điều kiện lọc Thương hiệu
+    // Query tìm kiếm và lọc chính cho trang danh sách (đã bao gồm thuongHieuId)
+    @Query("SELECT sp FROM SPChiTiet sp JOIN FETCH sp.sanPham p JOIN FETCH p.thuongHieu th JOIN FETCH sp.mauSac ms JOIN FETCH sp.kichThuoc kt WHERE " +
+            "(:search IS NULL OR LOWER(sp.maSPCT) LIKE LOWER(CONCAT('%', :search, '%')) " +
+            "OR LOWER(p.ten) LIKE LOWER(CONCAT('%', :search, '%'))) AND " +
+            "(:mauSacId IS NULL OR ms.id = :mauSacId) AND " +
+            "(:kichThuocId IS NULL OR kt.id = :kichThuocId) AND " +
+            "(:thuongHieuId IS NULL OR th.id = :thuongHieuId)")
     Page<SPChiTiet> findAllWithFilters(@Param("search") String search,
                                        @Param("mauSacId") Integer mauSacId,
                                        @Param("kichThuocId") Integer kichThuocId,
-                                       @Param("thuongHieuId") Integer thuongHieuId, // Tham số đã có
+                                       @Param("thuongHieuId") Integer thuongHieuId,
                                        Pageable pageable);
 
-    // Phương thức lọc này có logic kết hợp điều kiện bằng OR (khác với AND thông thường)
-    // và lọc theo tên thay vì ID cho size/color. Cần xem xét lại mục đích sử dụng
+    // Query lọc với logic OR và lọc theo tên (giữ nguyên theo yêu cầu)
     @Query("SELECT sp FROM SPChiTiet sp " +
             "WHERE " +
             "(:thuongHieuId IS NOT NULL AND sp.sanPham.thuongHieu.id = :thuongHieuId) OR " +
@@ -48,8 +49,8 @@ public interface SPChiTietRepo extends JpaRepository<SPChiTiet, Integer> {
             "    (:gia = '2' AND sp.donGia BETWEEN 500000 AND 1000000) OR " +
             "    (:gia = '3' AND sp.donGia > 1000000)) ) OR " +
             "(:trangThai IS NOT NULL AND sp.trangThai = :trangThai) OR " +
-            "(:size IS NOT NULL AND sp.kichThuoc.ten = :size) OR " + // Lọc theo tên size
-            "(:mauSac IS NOT NULL AND sp.mauSac.ten = :mauSac)") // Lọc theo tên màu sắc
+            "(:size IS NOT NULL AND sp.kichThuoc.ten = :size) OR " +
+            "(:mauSac IS NOT NULL AND sp.mauSac.ten = :mauSac)")
     Page<SPChiTiet> locSanPham(@Param("thuongHieuId") Integer thuongHieuId,
                                @Param("gia") String gia,
                                @Param("trangThai") Boolean trangThai,
@@ -57,10 +58,6 @@ public interface SPChiTietRepo extends JpaRepository<SPChiTiet, Integer> {
                                @Param("mauSac") String mauSac,
                                Pageable pageable);
 
-    // XÓA BỎ: Phương thức này đã được cung cấp bởi JpaRepository
-    // Optional<SPChiTiet> findById(Integer id);
-
-    // Các phương thức dưới đây thường nằm trong HinhAnhSPChiTietRepo
-    // List<HinhAnhSPChiTiet> findBySpChiTiet(SPChiTiet spChiTiet);
-    // List<HinhAnhSPChiTiet> findBySpChiTiet_Id(Integer id);
+    // Các phương thức liên quan đến HinhAnhSPChiTiet nên nằm trong HinhAnhSPChiTietRepo
+    // Ví dụ: List<HinhAnhSPChiTiet> findBySpChiTiet_Id(Integer spctId); (Trong HinhAnhSPChiTietRepo)
 }

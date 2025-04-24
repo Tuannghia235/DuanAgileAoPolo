@@ -156,8 +156,12 @@
             <input type="hidden" th:field="*{id}"/>
 
             <label for="ma">Mã:</label>
-            <input type="text" id="ma" th:field="*{ma}" readonly/>
-
+            <input type="text"
+                   id="ma"
+                   th:field="*{ma}"
+                   th:required="${#strings.isEmpty(mauSac.ma)}"
+                   th:readonly="${not #strings.isEmpty(mauSac.ma)}" />
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
             <label for="ten">Tên:</label>
             <input type="text" id="ten" th:field="*{ten}" required/>
 

@@ -12,6 +12,6 @@ import java.util.List;
 public interface SanPhamRepo extends JpaRepository<SanPham, Integer> {
     @Query("SELECT sp FROM SanPham sp WHERE sp.trangThai = true ORDER BY sp.ten DESC")
     List<SanPham> findTopNoiBat(Pageable pageable);
-
+    List<SanPham> findByTrangThaiTrue();
     Page<SanPham> findByTenContainingIgnoreCase(String ten, Pageable pageable);
 }

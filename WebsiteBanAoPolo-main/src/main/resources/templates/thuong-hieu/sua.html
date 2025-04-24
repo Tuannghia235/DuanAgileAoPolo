@@ -130,7 +130,7 @@
         <form th:action="@{'/thuong-hieu/sua/' + ${thuongHieu.id}}" th:object="${thuongHieu}" method="post" class="mx-auto" style="max-width: 600px;">
             <div class="mb-3">
                 <label for="ten" class="form-label">Tên Thương Hiệu</label>
-                <input type="text" id="ten" th:field="*{ten}" class="form-control" placeholder="Nhập tên thương hiệu" required>
+                <input type="text" id="ten" th:field="*{ten}" class="form-control" placeholder="Nhập tên thương hiệu" readonly>
             </div>
             <div class="mb-3">
                 <label for="moTa" class="form-label">Mô Tả</label>

@@ -185,9 +185,9 @@
                     <div class="btn-group">
                         <a th:href="@{/san-pham/chi-tiet/{id}(id=${sp.id})}" class="btn btn-info btn-sm">Chi tiết</a>
                         <a th:href="@{/san-pham/sua/{id}(id=${sp.id})}" class="btn btn-warning btn-sm">Sửa</a>
-                        <a th:href="@{/san-pham/xoa/{id}(id=${sp.id})}"
-                           class="btn btn-danger btn-sm"
-                           onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">Xóa</a>
+                        <form th:action="@{/san-pham/xoa/{id}(id=${sp.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Xác nhận xóa?')">Xóa</button>
+                        </form>
                     </div>
                 </td>
             </tr>

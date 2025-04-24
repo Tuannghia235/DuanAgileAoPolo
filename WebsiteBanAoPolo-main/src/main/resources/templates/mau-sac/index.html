@@ -146,12 +146,12 @@
                     <td class="text-center" th:text="${mau.id}"></td>
                     <td th:text="${mau.ma}"></td>
                     <td th:text="${mau.ten}"></td>
-                    <td th:text="${mau.trangThai ? 'Hoạt động' : 'Không hoạt động'}" class="text-center"></td>
+                    <td th:text="${mau.trangThai != null ? (mau.trangThai ? 'Hoạt động' : 'Không hoạt động') : 'Không xác định'}"></td>
                     <td class="text-center">
                         <a th:href="@{'/mau-sac/sua/' + ${mau.id}}" class="btn btn-sm btn-warning">✏️ Sửa</a>
-                        <a th:href="@{'/mau-sac/xoa/' + ${mau.id}}"
-                           onclick="return confirm('Bạn có chắc muốn xóa màu sắc này?')"
-                           class="btn btn-sm btn-danger">🗑️ Xóa</a>
+                        <form th:action="@{'/mau-sac/xoa/' + ${mau.id}}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Xác nhận xóa?')">Xóa</button>
+                        </form>
                     </td>
                 </tr>
                 </tbody>

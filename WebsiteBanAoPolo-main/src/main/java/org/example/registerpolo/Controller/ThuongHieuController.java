@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -33,8 +34,24 @@ public class ThuongHieuController {
     }
 
     @PostMapping("/save")
-    public String createThuongHieu(@ModelAttribute ThuongHieu thuongHieu) {
+    public String createThuongHieu(@ModelAttribute ThuongHieu thuongHieu, RedirectAttributes redirectAttributes) {
+        // Check if it's an update operation
+        if (thuongHieu.getId() != null) {
+            ThuongHieu existingThuongHieu = thuongHieuRepository.findById(thuongHieu.getId()).orElse(null);
+            if (existingThuongHieu != null && !existingThuongHieu.getTen().equals(thuongHieu.getTen())) {
+                redirectAttributes.addFlashAttribute("error", "Không thể thay đổi tên thương hiệu!");
+                return "redirect:/thuong-hieu/sua/" + thuongHieu.getId();
+            }
+        } else {
+            // Validate uniqueness of 'ten' for new entries
+            if (thuongHieuRepository.existsByTen(thuongHieu.getTen())) {
+                redirectAttributes.addFlashAttribute("error", "Tên thương hiệu đã tồn tại!");
+                return "redirect:/thuong-hieu/them";
+            }
+        }
+
         thuongHieuRepository.save(thuongHieu);
+        redirectAttributes.addFlashAttribute("success", "Lưu thành công!");
         return "redirect:/thuong-hieu";
     }
 
@@ -43,13 +60,24 @@ public class ThuongHieuController {
     public Map<String, Object> saveThuongHieu(@ModelAttribute ThuongHieu thuongHieu) {
         Map<String, Object> response = new HashMap<>();
         try {
+            // Validate uniqueness of 'ten'
+            if (thuongHieu.getId() == null && thuongHieuRepository.existsByTen(thuongHieu.getTen())) {
+                response.put("success", false);
+                response.put("field", "ten");
+                response.put("message", "Tên thương hiệu đã tồn tại!");
+                return response;
+            }
+            if (thuongHieu.getId() == null) { // Kiểm tra nếu là entity mới (chưa có ID)
+                thuongHieu.setTrangThai(true); // Đặt trạng thái mặc định là hoạt động
+            }
+
             ThuongHieu savedThuongHieu = thuongHieuRepository.save(thuongHieu);
             response.put("success", true);
             response.put("id", savedThuongHieu.getId());
             response.put("ten", savedThuongHieu.getTen());
         } catch (Exception e) {
             response.put("success", false);
-            response.put("message", e.getMessage());
+            response.put("message", "Đã xảy ra lỗi: " + e.getMessage());
         }
         return response;
     }
@@ -62,15 +90,23 @@ public class ThuongHieuController {
     }
 
     @PostMapping("/sua/{id}")
-    public String updateThuongHieu(@PathVariable Integer id, @ModelAttribute ThuongHieu thuongHieu) {
+    public String updateThuongHieu(@PathVariable Integer id, @ModelAttribute ThuongHieu thuongHieu, RedirectAttributes redirectAttributes) {
         thuongHieu.setId(id);
         thuongHieuRepository.save(thuongHieu);
+        redirectAttributes.addFlashAttribute("success", "Sửa thành công!");
         return "redirect:/thuong-hieu";
     }
 
-    @GetMapping("/xoa/{id}")
-    public String deleteThuongHieu(@PathVariable Integer id) {
-        thuongHieuRepository.deleteById(id);
+    @PostMapping("/xoa/{id}")
+    public String xoaThuongHieu(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        ThuongHieu thuongHieu = thuongHieuRepository.findById(id).orElse(null);
+        if (thuongHieu != null) {
+            thuongHieu.setTrangThai(false); // Set trạng thái to 'Không hoạt động'
+            thuongHieuRepository.save(thuongHieu);
+            redirectAttributes.addFlashAttribute("success", "Trạng thái đã được cập nhật thành 'Không hoạt động'!");
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Không tìm thấy thương hiệu!");
+        }
         return "redirect:/thuong-hieu";
     }
 }

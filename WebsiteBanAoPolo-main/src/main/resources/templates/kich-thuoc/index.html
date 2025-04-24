@@ -144,10 +144,12 @@
                 <td th:text="${kt.id}"></td>
                 <td th:text="${kt.ma}"></td>
                 <td th:text="${kt.ten}"></td>
-                <td th:text="${kt.trangThai ? 'Hoạt động' : 'Không hoạt động'}"></td>
+                <td th:text="${kt.trangThai != null ? (kt.trangThai ? 'Hoạt động' : 'Không hoạt động') : 'Không xác định'}"></td>
                 <td>
                     <a th:href="@{'/kich-thuoc/sua/' + ${kt.id}}" class="btn btn-warning btn-sm">Sửa</a>
-                    <a th:href="@{'/kich-thuoc/xoa/' + ${kt.id}}" class="btn btn-danger btn-sm" onclick="return confirm('Xác nhận xóa?')">Xóa</a>
+                    <form th:action="@{'/kich-thuoc/xoa/' + ${kt.id}}" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Xác nhận xóa?')">Xóa</button>
+                    </form>
                 </td>
             </tr>
             </tbody>

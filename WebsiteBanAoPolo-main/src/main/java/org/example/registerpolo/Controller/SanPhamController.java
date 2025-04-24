@@ -81,7 +81,7 @@ public class SanPhamController {
         Optional<SanPham> sanPhamOpt = sanPhamRepo.findById(id);
         if (sanPhamOpt.isPresent()) {
             // Sử dụng phương thức findAll() của JpaRepository để lấy tất cả thương hiệu
-            model.addAttribute("thuongHieus", thuongHieuRepo.findAll());
+            model.addAttribute("thuongHieus", thuongHieuRepo.findByTrangThaiTrue());
 
             model.addAttribute("sanPham", sanPhamOpt.get());
             return "san-pham/cap-nhat";
@@ -121,18 +121,16 @@ public class SanPhamController {
 
 
 
-    @GetMapping("/xoa/{id}")
+    @PostMapping("/xoa/{id}")
     public String xoaSanPham(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
-        try {
-            Optional<SanPham> sanPhamOpt = sanPhamRepo.findById(id);
-            if (sanPhamOpt.isPresent()) {
-                sanPhamRepo.deleteById(id);
-                redirectAttributes.addFlashAttribute("successMessage", "Xóa sản phẩm thành công!");
-            } else {
-                redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy sản phẩm!");
-            }
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorMessage", "Lỗi khi xóa sản phẩm: " + e.getMessage());
+        Optional<SanPham> sanPhamOpt = sanPhamRepo.findById(id);
+        if (sanPhamOpt.isPresent()) {
+            SanPham sanPham = sanPhamOpt.get();
+            sanPham.setTrangThai(false); // Set trạng thái to 'Không hoạt động'
+            sanPhamRepo.save(sanPham);
+            redirectAttributes.addFlashAttribute("successMessage", "Trạng thái đã được cập nhật thành 'Không hoạt động'!");
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy sản phẩm!");
         }
         return "redirect:/san-pham";
     }
