@@ -24,8 +24,12 @@ public class SPChiTiet {
     private String maSPCT;
 
     @ManyToOne
+    @JoinColumn(name = "IdThuongHieu")
+    private ThuongHieu thuongHieu;
+
+    @ManyToOne
     @JoinColumn(name = "IdMauSac")
-    private MauSac mauSac;
+    private MauSac mauSac;  
 
     @ManyToOne
     @JoinColumn(name = "IdKichThuoc")

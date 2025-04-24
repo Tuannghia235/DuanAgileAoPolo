@@ -10,6 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 @RequestMapping("/mau-sac")
 public class MauSacController {
@@ -30,10 +33,19 @@ public class MauSacController {
     }
 
     @PostMapping("/save")
-    public String luuMauSac(@ModelAttribute MauSac mauSac, RedirectAttributes redirectAttributes) {
-        repo.save(mauSac);
-        redirectAttributes.addFlashAttribute("success", "Lưu thành công!");
-        return "redirect:/mau-sac";
+    @ResponseBody
+    public Map<String, Object> saveMauSac(@ModelAttribute MauSac mauSac) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            MauSac savedMauSac = repo.save(mauSac);
+            response.put("success", true);
+            response.put("id", savedMauSac.getId());
+            response.put("ten", savedMauSac.getTen());
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", e.getMessage());
+        }
+        return response;
     }
 
     @GetMapping("/sua/{id}")

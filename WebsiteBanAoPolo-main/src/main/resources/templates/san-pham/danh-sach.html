@@ -11,32 +11,41 @@
             font-family: 'Segoe UI', sans-serif;
         }
 
+        /* Sidebar nền tối */
         .sidebar {
             height: 100vh;
-            width: 240px;
+            width: 250px; /* Tăng nhẹ chiều rộng cho vừa nội dung */
             position: fixed;
             top: 0;
             left: 0;
-            background-color: #343a40;
-            padding-top: 20px;
+            background-color: #3b3737; /* Màu đen đậm */
+            padding: 20px 10px;
+            border-right: 1px solid #444; /* Viền mỏng */
+            min-height: 100vh;
+            overflow-y: auto; /* Thêm scroll nếu nội dung dài */
+            z-index: 1000; /* Đảm bảo sidebar nằm trên nội dung chính */
         }
 
+        /* Các link trong sidebar */
         .sidebar a {
-            padding: 15px 20px;
+            padding: 10px 15px;
             display: block;
-            color: #ccc;
+            color: #fff; /* Chữ trắng */
             font-size: 16px;
             text-decoration: none;
             transition: all 0.3s;
+            border-radius: 5px; /* Bo góc nhẹ */
         }
 
+        /* Hover/chạm vào thì xám */
         .sidebar a:hover {
-            background-color: #495057;
+            background-color: #444; /* Màu xám đậm */
             color: #fff;
         }
 
+        /* Link active */
         .sidebar a.active {
-            background-color: #0d6efd;
+            background-color: #0d6efd; /* Màu xanh dương của Bootstrap primary */
             color: white;
         }
 
@@ -46,7 +55,7 @@
         }
 
         .content-section {
-            margin-left: 260px;
+            margin-left: 260px; /* Tăng margin để phù hợp với sidebar rộng hơn */
             padding: 40px 20px;
             min-height: 100vh;
         }
@@ -60,42 +69,17 @@
             color: #0d6efd;
             font-weight: bold;
         }
-        /* Link style */
-        /* Sidebar nền đen */
-        .sidebar {
-            width: 250px;
-            background-color: #3b3737; /* Màu đen */
-            padding: 20px 10px;
-            border-right: 1px solid #444;
-            min-height: 100vh;
-        }
-
-        /* Các link trong sidebar */
-        .sidebar a {
-            display: block;
-            padding: 10px 15px;
-            color: #fff; /* Chữ trắng */
-            text-decoration: none;
-            transition: 0.3s;
-            border-radius: 5px;
-        }
-
-        /* Hover/chạm vào thì xám */
-        .sidebar a:hover {
-            background-color: #444; /* Màu xám đậm */
-            color: #fff;
-        }
 
         /* Dropdown con */
         .dropdown-content {
             display: none;
-            padding-left: 15px;
+            padding-left: 15px; /* Thụt vào */
         }
 
         .dropdown-content a {
             font-size: 14px;
             padding: 8px 15px;
-            color: #ddd;
+            color: #ddd; /* Màu chữ nhạt hơn */
         }
 
         .dropdown-content a:hover {
@@ -108,11 +92,16 @@
             display: block;
         }
 
+        /* Style cho phân trang */
+        .content-section nav .pagination {
+            margin-top: 20px; /* Thêm khoảng cách trên cho phân trang */
+            justify-content: center; /* Căn giữa phân trang */
+        }
+
     </style>
 </head>
 <body>
 
-<!-- Sidebar -->
 <div class="sidebar">
     <div class="text-center pb-3">
         <a href="/trang-chu">
@@ -125,19 +114,16 @@
     <a href="/nhan-vien">👤 Nhân viên</a>
     <a href="/khach-hang">🧑‍💼 Khách hàng</a>
 
-    <!-- Dropdown: Sản phẩm -->
     <div class="dropdown">
         <a href="#" class="dropdown-toggle" onclick="toggleDropdown('dropdownSanPham')">👕 Sản phẩm ▼</a>
         <div id="dropdownSanPham" class="dropdown-content">
-            <a href="/san-pham">📄 Danh sách sản phẩm</a>
-            <a href="/san-pham-chi-tiet">📋 Sản phẩm chi tiết</a>
+            <a href="/san-pham" class="active">📄 Danh sách sản phẩm</a> <a href="/san-pham-chi-tiet">📋 Sản phẩm chi tiết</a>
             <a href="/kich-thuoc">📐 Size</a>
             <a href="/mau-sac">🎨 Màu</a>
             <a href="/thuong-hieu">🏷️ Thương hiệu</a>
         </div>
     </div>
 
-    <!-- Dropdown: Khuyến mại -->
     <div class="dropdown">
         <a href="#" class="dropdown-toggle" onclick="toggleDropdown('dropdownKhuyenMai')">🎁 Khuyến mại ▼</a>
         <div id="dropdownKhuyenMai" class="dropdown-content">
@@ -150,7 +136,6 @@
     <a href="/thong-ke">📊 Thống kê</a>
 </div>
 
-<!-- Content Section -->
 <div class="content-section">
     <div class="container mt-4">
         <form method="get" class="mb-3">
@@ -161,13 +146,11 @@
         </form>
         <h1 class="mb-4">Danh sách sản phẩm</h1>
 
-        <!-- Thông báo thành công -->
         <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
             <span th:text="${successMessage}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
-        <!-- Thông báo lỗi -->
         <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
             <span th:text="${errorMessage}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -182,20 +165,18 @@
             <tr>
                 <th>Mã</th>
                 <th>Tên</th>
-                <th>Thương hiệu</th> <!-- Thêm cột mới -->
+                <th>Thương hiệu</th>
                 <th>Trạng thái</th>
                 <th>Thao tác</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="sp : ${sanPhams}">
-                <td th:text="${sp.ma}"></td>
+            <tr th:unless="${sanPhams.isEmpty()}" th:each="sp : ${sanPhams.getContent()}"> <td th:text="${sp.ma}"></td>
                 <td th:text="${sp.ten}"></td>
                 <td>
                     <span th:if="${sp.thuongHieu != null}" th:text="${sp.thuongHieu.ten}"></span>
                     <span th:unless="${sp.thuongHieu != null}">Không rõ</span>
                 </td>
-                <!-- Hiển thị tên thương hiệu -->
                 <td>
                     <span th:if="${sp.trangThai}" class="badge bg-success">Hoạt động</span>
                     <span th:unless="${sp.trangThai}" class="badge bg-danger">Ngưng hoạt động</span>
@@ -210,34 +191,50 @@
                     </div>
                 </td>
             </tr>
-            <tr th:if="${sanPhams==null}">
-                <td colspan="5" class="text-center">Không có sản phẩm nào</td> <!-- Sửa colspan -->
+            <tr th:if="${sanPhams.isEmpty()}">
+                <td colspan="5" class="text-center">Không có sản phẩm nào</td>
             </tr>
             </tbody>
         </table>
 
+        <nav th:if="${!sanPhams.isEmpty()}"> <ul class="pagination">
+            <li class="page-item" th:classappend="${sanPhams.hasPrevious()} ? '' : 'disabled'">
+                <a class="page-link" th:href="@{/san-pham(page=${sanPhams.number - 1}, search=${search})}">Trước</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, sanPhams.totalPages - 1)}"
+                th:classappend="${i == sanPhams.number} ? 'active'">
+                <a class="page-link" th:href="@{/san-pham(page=${i}, search=${search})}" th:text="${i + 1}"></a>
+            </li>
+            <li class="page-item" th:classappend="${sanPhams.hasNext()} ? '' : 'disabled'">
+                <a class="page-link" th:href="@{/san-pham(page=${sanPhams.number + 1}, search=${search})}">Tiếp</a>
+            </li>
+        </ul>
+        </nav>
     </div>
 </div>
-<nav>
-    <ul class="pagination">
-        <li class="page-item" th:classappend="${sanPhams.hasPrevious()} ? '' : 'disabled'">
-            <a class="page-link" th:href="@{/san-pham(page=${sanPhams.number - 1}, search=${search})}">Trước</a>
-        </li>
-        <li class="page-item" th:each="i : ${#numbers.sequence(0, sanPhams.totalPages - 1)}"
-            th:classappend="${i == sanPhams.number} ? 'active'">
-            <a class="page-link" th:href="@{/san-pham(page=${i}, search=${search})}" th:text="${i + 1}"></a>
-        </li>
-        <li class="page-item" th:classappend="${sanPhams.hasNext()} ? '' : 'disabled'">
-            <a class="page-link" th:href="@{/san-pham(page=${sanPhams.number + 1}, search=${search})}">Tiếp</a>
-        </li>
-    </ul>
-</nav>
+
 <script>
     function toggleDropdown(id) {
         const el = document.getElementById(id);
+        // Đóng tất cả các dropdown khác
+        document.querySelectorAll('.dropdown-content.show').forEach(openDropdown => {
+            if (openDropdown.id !== id) {
+                openDropdown.classList.remove('show');
+            }
+        });
+        // Mở/đóng dropdown hiện tại
         el.classList.toggle("show");
+    }
+
+    // Đóng dropdown khi click ra ngoài
+    window.onclick = function(event) {
+        if (!event.target.matches('.dropdown-toggle')) {
+            document.querySelectorAll('.dropdown-content.show').forEach(openDropdown => {
+                openDropdown.classList.remove('show');
+            });
+        }
     }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html> 
+</html>

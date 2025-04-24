@@ -11,32 +11,41 @@
             font-family: 'Segoe UI', sans-serif;
         }
 
+        /* Sidebar nền tối - Gộp CSS */
         .sidebar {
             height: 100vh;
-            width: 240px;
+            width: 250px; /* Tăng nhẹ chiều rộng */
             position: fixed;
             top: 0;
             left: 0;
-            background-color: #343a40;
-            padding-top: 20px;
+            background-color: #3b3737; /* Màu đen đậm */
+            padding: 20px 10px;
+            border-right: 1px solid #444; /* Viền mỏng */
+            min-height: 100vh;
+            overflow-y: auto; /* Thêm scroll nếu nội dung dài */
+            z-index: 1000; /* Đảm bảo sidebar nằm trên nội dung chính */
         }
 
+        /* Các link trong sidebar */
         .sidebar a {
-            padding: 15px 20px;
+            padding: 10px 15px;
             display: block;
-            color: #ccc;
+            color: #fff; /* Chữ trắng */
             font-size: 16px;
             text-decoration: none;
             transition: all 0.3s;
+            border-radius: 5px; /* Bo góc nhẹ */
         }
 
+        /* Hover/chạm vào thì xám */
         .sidebar a:hover {
-            background-color: #495057;
+            background-color: #444; /* Màu xám đậm */
             color: #fff;
         }
 
+        /* Link active */
         .sidebar a.active {
-            background-color: #0d6efd;
+            background-color: #0d6efd; /* Màu xanh dương của Bootstrap primary */
             color: white;
         }
 
@@ -46,7 +55,7 @@
         }
 
         .content-section {
-            margin-left: 260px;
+            margin-left: 260px; /* Tăng margin để phù hợp với sidebar rộng hơn */
             padding: 40px 20px;
             min-height: 100vh;
         }
@@ -60,42 +69,17 @@
             color: #0d6efd;
             font-weight: bold;
         }
-        /* Link style */
-        /* Sidebar nền đen */
-        .sidebar {
-            width: 250px;
-            background-color: #3b3737; /* Màu đen */
-            padding: 20px 10px;
-            border-right: 1px solid #444;
-            min-height: 100vh;
-        }
-
-        /* Các link trong sidebar */
-        .sidebar a {
-            display: block;
-            padding: 10px 15px;
-            color: #fff; /* Chữ trắng */
-            text-decoration: none;
-            transition: 0.3s;
-            border-radius: 5px;
-        }
-
-        /* Hover/chạm vào thì xám */
-        .sidebar a:hover {
-            background-color: #444; /* Màu xám đậm */
-            color: #fff;
-        }
 
         /* Dropdown con */
         .dropdown-content {
             display: none;
-            padding-left: 15px;
+            padding-left: 15px; /* Thụt vào */
         }
 
         .dropdown-content a {
             font-size: 14px;
             padding: 8px 15px;
-            color: #ddd;
+            color: #ddd; /* Màu chữ nhạt hơn */
         }
 
         .dropdown-content a:hover {
@@ -108,11 +92,21 @@
             display: block;
         }
 
+        /* Căn chỉnh nút "Thêm..." bên dưới select */
+        .select-with-add-link {
+            display: flex;
+            flex-direction: column;
+        }
+        .select-with-add-link .form-select {
+            flex-grow: 1; /* Cho select giãn hết chiều ngang */
+            margin-bottom: 5px; /* Khoảng cách giữa select và link */
+        }
+
+
     </style>
 </head>
 <body>
 
-<!-- Sidebar -->
 <div class="sidebar">
     <div class="text-center pb-3">
         <a href="/trang-chu">
@@ -125,19 +119,16 @@
     <a href="/nhan-vien">👤 Nhân viên</a>
     <a href="/khach-hang">🧑‍💼 Khách hàng</a>
 
-    <!-- Dropdown: Sản phẩm -->
     <div class="dropdown">
         <a href="#" class="dropdown-toggle" onclick="toggleDropdown('dropdownSanPham')">👕 Sản phẩm ▼</a>
         <div id="dropdownSanPham" class="dropdown-content">
             <a href="/san-pham">📄 Danh sách sản phẩm</a>
-            <a href="/san-pham-chi-tiet">📋 Sản phẩm chi tiết</a>
-            <a href="/kich-thuoc">📐 Size</a>
+            <a href="/san-pham-chi-tiet" class="active">📋 Sản phẩm chi tiết</a> <a href="/kich-thuoc">📐 Size</a>
             <a href="/mau-sac">🎨 Màu</a>
             <a href="/thuong-hieu">🏷️ Thương hiệu</a>
         </div>
     </div>
 
-    <!-- Dropdown: Khuyến mại -->
     <div class="dropdown">
         <a href="#" class="dropdown-toggle" onclick="toggleDropdown('dropdownKhuyenMai')">🎁 Khuyến mại ▼</a>
         <div id="dropdownKhuyenMai" class="dropdown-content">
@@ -150,43 +141,69 @@
     <a href="/thong-ke">📊 Thống kê</a>
 </div>
 
-<!-- Content Section -->
 <div class="content-section">
     <div class="container mt-4">
         <form method="get" class="mb-3">
+            <div class="row g-2 align-items-end"> <div class="col-md-4">
+                <label for="search" class="form-label">Tìm kiếm tên SPCT</label>
+                <input type="text" id="search" name="search" class="form-control" placeholder="Tìm kiếm theo mã hoặc tên SP"
+                       th:value="${search}">
+            </div>
+                <div class="col-md-auto"> <label class="form-label">.</label> <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+                </div>
+            </div>
             <div class="row g-2">
-                <div class="col-md-4">
-                    <input type="text" name="search" class="form-control" placeholder="Tìm kiếm sản phẩm"
-                           th:value="${search}">
-                </div>
                 <div class="col-md-3">
-                    <select name="mauSac" class="form-select">
-                        <option value="" th:selected="${mauSacId == null}">-- Chọn màu sắc --</option>
-                        <option th:each="ms : ${mauSacs}" th:value="${ms.id}" th:text="${ms.ten}"
-                                th:selected="${mauSacId == ms.id}"></option>
-                    </select>
+                    <label for="kichThuocFilter" class="form-label">Kích thước</label>
+                    <div class="select-with-add-link">
+                        <select id="kichThuocFilter" name="kichThuocId" class="form-select">
+                            <option value="">-- Chọn Kích thước --</option> <option th:each="kt : ${kichThuocs}"
+                                                                                    th:value="${kt.id}"
+                                                                                    th:text="${kt.ten}"
+                                                                                    th:selected="${#strings.equals(param.kichThuocId, kt.id)}">
+                        </option>
+                        </select>
+                    </div>
                 </div>
+
                 <div class="col-md-3">
-                    <select name="kichThuoc" class="form-select">
-                        <option value="" th:selected="${kichThuocId == null}">-- Chọn kích thước --</option>
-                        <option th:each="kt : ${kichThuocs}" th:value="${kt.id}" th:text="${kt.ten}"
-                                th:selected="${kichThuocId == kt.id}"></option>
-                    </select>
+                    <label for="mauSacFilter" class="form-label">Màu sắc</label>
+                    <div class="select-with-add-link">
+                        <select id="mauSacFilter" name="mauSacId" class="form-select">
+                            <option value="">-- Chọn Màu sắc --</option> <option th:each="ms : ${mauSacs}"
+                                                                                 th:value="${ms.id}"
+                                                                                 th:text="${ms.ten}"
+                                                                                 th:selected="${#strings.equals(param.mauSacId, ms.id)}">
+                        </option>
+                        </select>
+                    </div>
                 </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-primary w-100">Lọc</button>
+
+                <div class="col-md-3">
+                    <label for="thuongHieuFilter" class="form-label">Thương hiệu</label>
+                    <div class="select-with-add-link">
+                        <select id="thuongHieuFilter" name="thuongHieuId" class="form-select">
+                            <option value="">-- Chọn Thương hiệu --</option> <option th:each="th : ${thuongHieus}"
+                                                                                     th:value="${th.id}"
+                                                                                     th:text="${th.ten}"
+                                                                                     th:selected="${#strings.equals(param.thuongHieuId, th.id)}">
+                        </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-auto">
+                    <label class="form-label">&nbsp;</label> <button type="submit" class="btn btn-primary w-100">Lọc</button>
                 </div>
             </div>
         </form>
+
         <h1 class="mb-4">Danh sách chi tiết sản phẩm</h1>
 
-        <!-- Thông báo thành công -->
         <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
             <span th:text="${successMessage}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
-        <!-- Thông báo lỗi -->
         <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
             <span th:text="${errorMessage}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -210,7 +227,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="spct : ${spChiTiets}">
+            <tr th:unless="${spChiTiets.isEmpty()}" th:each="spct : ${spChiTiets.getContent()}">
                 <td th:text="${spct.maSPCT}"></td>
                 <td th:text="${spct.sanPham != null ? spct.sanPham.ten : ''}"></td>
                 <td th:text="${spct.mauSac != null ? spct.mauSac.ten : ''}"></td>
@@ -231,93 +248,37 @@
                     </div>
                 </td>
             </tr>
-            <tr th:if="${spChiTiets==null}">
+            <tr th:if="${spChiTiets.isEmpty()}">
                 <td colspan="8" class="text-center">Không có chi tiết sản phẩm nào</td>
             </tr>
             </tbody>
         </table>
-    </div><div class="d-flex gap-2">
-        <button type="submit" class="btn btn-primary btn-lg">💾 Lưu</button>
-        <a th:href="@{/san-pham-chi-tiet}" class="btn btn-secondary btn-lg">❌ Hủy</a>
+
     </div>
-    <nav>
-        <ul class="pagination">
-            <li class="page-item" th:classappend="${spChiTiets.hasPrevious()} ? '' : 'disabled'">
-                <a class="page-link" th:href="@{/san-pham-chi-tiet(page=${spChiTiets.number - 1}, search=${search}, mauSac=${mauSacId}, kichThuoc=${kichThuocId})}">Trước</a>
-            </li>@media (max-width: 768px) {
-                .sidebar {
-                    width: 100%;
-                    position: relative;
-                }
-
-                .content-section {
-                    margin-left: 0;
-                    padding: 20px;
-                }
-            }<table class="table table-striped table-hover">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Mã SPCT</th>
-                        <th>Tên sản phẩm</th>
-                        <th>Màu sắc</th>
-                        <th>Kích thước</th>
-                        <th>Số lượng</th>
-                        <th>Đơn giá</th>
-                        <th>Trạng thái</th>
-                        <th>Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="spct : ${spChiTiets}">
-                        <td th:text="${spct.maSPCT}"></td>
-                        <td th:text="${spct.sanPham != null ? spct.sanPham.ten : ''}"></td>
-                        <td th:text="${spct.mauSac != null ? spct.mauSac.ten : ''}"></td>
-                        <td th:text="${spct.kichThuoc != null ? spct.kichThuoc.ten : ''}"></td>
-                        <td th:text="${spct.soLuong}"></td>
-                        <td th:text="${#numbers.formatDecimal(spct.donGia,0,'COMMA',0,'POINT')} + ' VNĐ'"></td>
-                        <td>
-                            <span th:if="${spct.trangThai}" class="badge bg-success">Active</span>
-                            <span th:unless="${spct.trangThai}" class="badge bg-danger">Inactive</span>
-                        </td>
-                        <td>
-                            <div class="btn-group">
-                                <a th:href="@{/san-pham-chi-tiet/chi-tiet/{id}(id=${spct.id})}" class="btn btn-info btn-sm" title="View Details">Details</a>
-                                <a th:href="@{/san-pham-chi-tiet/sua/{id}(id=${spct.id})}" class="btn btn-warning btn-sm" title="Edit">Edit</a>
-                                <a th:href="@{/san-pham-chi-tiet/xoa/{id}(id=${spct.id})}" class="btn btn-danger btn-sm" title="Delete" onclick="return confirm('Are you sure?');">Delete</a>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr th:if="${spChiTiets==null}">
-                        <td colspan="8" class="text-center">No product details available</td>
-                    </tr>
-                </tbody>
-            </table>@media (max-width: 768px) {
-                .sidebar {
-                    width: 100%;
-                    position: relative;
-                }
-
-                .content-section {
-                    margin-left: 0;
-                    padding: 20px;
-                }
-            }
-            <li class="page-item" th:each="i : ${#numbers.sequence(0, spChiTiets.totalPages - 1)}"
-                th:classappend="${i == spChiTiets.number} ? 'active'">
-                <a class="page-link" th:href="@{/san-pham-chi-tiet(page=${i}, search=${search}, mauSac=${mauSacId}, kichThuoc=${kichThuocId})}" th:text="${i + 1}"></a>
-            </li>
-            <li class="page-item" th:classappend="${spChiTiets.hasNext()} ? '' : 'disabled'">
-                <a class="page-link" th:href="@{/san-pham-chi-tiet(page=${spChiTiets.number + 1}, search=${search}, mauSac=${mauSacId}, kichThuoc=${kichThuocId})}">Tiếp</a>
-            </li>
-        </ul>
-    </nav>
 </div>
 <script>
     function toggleDropdown(id) {
         const el = document.getElementById(id);
+        // Đóng tất cả các dropdown khác đang mở
+        document.querySelectorAll('.dropdown-content.show').forEach(openDropdown => {
+            if (openDropdown.id !== id) {
+                openDropdown.classList.remove('show');
+            }
+        });
+        // Mở/đóng dropdown hiện tại
         el.classList.toggle("show");
+    }
+
+    // Đóng dropdown khi click ra ngoài
+    window.onclick = function(event) {
+        // Kiểm tra xem click có nằm trong dropdown-toggle (nút mở dropdown) hoặc dropdown-content (nội dung dropdown) không
+        if (!event.target.matches('.dropdown-toggle') && !event.target.closest('.dropdown-content')) {
+            document.querySelectorAll('.dropdown-content.show').forEach(openDropdown => {
+                openDropdown.classList.remove('show');
+            });
+        }
     }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html> 
+</html>

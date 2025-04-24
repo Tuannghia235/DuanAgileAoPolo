@@ -8,86 +8,68 @@
     <style>
         body {
             background: linear-gradient(to right, #e3f2fd, #ffffff);
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Font chữ đẹp hơn */
         }
+        /* Gộp các style cho sidebar */
         .sidebar {
             height: 100vh;
-            width: 240px;
+            width: 250px; /* Tăng nhẹ chiều rộng */
             position: fixed;
             top: 0;
             left: 0;
-            background-color: #343a40;
+            background-color: #343a40; /* Giữ màu gốc Bootstrap sẫm hơn */
             padding-top: 20px;
+            color: #ccc; /* Màu chữ mặc định cho sidebar */
+            border-right: 1px solid #495057; /* Border */
+            overflow-y: auto; /* Thêm scroll nếu nội dung dài */
         }
         .sidebar a {
-            padding: 15px 20px;
+            padding: 12px 20px; /* Điều chỉnh padding */
             display: block;
             color: #ccc;
             font-size: 16px;
             text-decoration: none;
             transition: all 0.3s;
+            border-radius: 0; /* Bỏ border-radius nếu không cần */
         }
         .sidebar a:hover {
-            background-color: #495057;
+            background-color: #495057; /* Màu nền hover sẫm hơn */
             color: #fff;
         }
         .sidebar a.active {
-            background-color: #0d6efd;
+            background-color: #0d6efd; /* Màu nền active */
             color: white;
         }
         .sidebar-logo {
             text-align: center;
-            padding: 10px 0;
+            padding: 10px 0 20px 0; /* Điều chỉnh padding */
         }
         .content-section {
-            margin-left: 260px;
+            margin-left: 270px; /* Điều chỉnh margin tương ứng với sidebar width */
             padding: 40px 20px;
             min-height: 100vh;
         }
         .card {
             border: none;
             border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Thêm shadow nhẹ */
         }
         .card-title {
             color: #0d6efd;
             font-weight: bold;
+            margin-bottom: 20px;
         }
-        /* Link style */
-        /* Sidebar nền đen */
-        .sidebar {
-            width: 250px;
-            background-color: #3b3737; /* Màu đen */
-            padding: 20px 10px;
-            border-right: 1px solid #444;
-            min-height: 100vh;
-        }
-
-        /* Các link trong sidebar */
-        .sidebar a {
-            display: block;
-            padding: 10px 15px;
-            color: #fff; /* Chữ trắng */
-            text-decoration: none;
-            transition: 0.3s;
-            border-radius: 5px;
-        }
-
-        /* Hover/chạm vào thì xám */
-        .sidebar a:hover {
-            background-color: #444; /* Màu xám đậm */
-            color: #fff;
-        }
-
         /* Dropdown con */
         .dropdown-content {
             display: none;
-            padding-left: 15px;
+            padding-left: 25px; /* Thụt vào so với menu cha */
+            background-color: #495057; /* Màu nền cho dropdown */
         }
 
         .dropdown-content a {
-            font-size: 14px;
-            padding: 8px 15px;
-            color: #ddd;
+            font-size: 15px; /* Điều chỉnh font size */
+            padding: 10px 15px;
+            color: #ddd; /* Màu chữ nhạt hơn */
         }
 
         .dropdown-content a:hover {
@@ -100,15 +82,25 @@
             display: block;
         }
 
+        /* Style cho preview ảnh */
+        #previewContainer img {
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: cover;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-right: 10px; /* Khoảng cách giữa các ảnh */
+            margin-bottom: 10px; /* Khoảng cách dưới ảnh */
+        }
+
     </style>
 </head>
 <body>
 
-<!-- Sidebar -->
 <div class="sidebar">
-    <div class="text-center pb-3">
+    <div class="sidebar-logo">
         <a href="/trang-chu">
-            <img src="/image/logo.png" alt="Logo" style="max-width: 120px;">
+            <img src="/image/logo.png" alt="Logo" class="img-fluid" style="max-width: 120px;">
         </a>
     </div>
 
@@ -117,9 +109,8 @@
     <a href="/nhan-vien">👤 Nhân viên</a>
     <a href="/khach-hang">🧑‍💼 Khách hàng</a>
 
-    <!-- Dropdown: Sản phẩm -->
     <div class="dropdown">
-        <a href="#" class="dropdown-toggle" onclick="toggleDropdown('dropdownSanPham')">👕 Sản phẩm ▼</a>
+        <a href="#" class="dropdown-toggle" type="button" onclick="toggleDropdown('dropdownSanPham')">👕 Sản phẩm ▼</a>
         <div id="dropdownSanPham" class="dropdown-content">
             <a href="/san-pham">📄 Danh sách sản phẩm</a>
             <a href="/san-pham-chi-tiet">📋 Sản phẩm chi tiết</a>
@@ -129,9 +120,8 @@
         </div>
     </div>
 
-    <!-- Dropdown: Khuyến mại -->
     <div class="dropdown">
-        <a href="#" class="dropdown-toggle" onclick="toggleDropdown('dropdownKhuyenMai')">🎁 Khuyến mại ▼</a>
+        <a href="#" class="dropdown-toggle" type="button" onclick="toggleDropdown('dropdownKhuyenMai')">🎁 Khuyến mại ▼</a>
         <div id="dropdownKhuyenMai" class="dropdown-content">
             <a href="/khuyen-mai">📢 Chương trình khuyến mại</a>
             <a href="/khuyen-mai-san-pham">🛍️ Danh sách sản phẩm khuyến mại</a>
@@ -141,77 +131,162 @@
     <a href="/hoa-don/view">🧾 Hóa đơn</a>
     <a href="/thong-ke">📊 Thống kê</a>
 </div>
-<!-- Content Section -->
+
 <div class="content-section">
     <div class="container mt-4">
         <h1 class="mb-4">Thêm mới chi tiết sản phẩm</h1>
 
-        <!-- Thông báo lỗi -->
-        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div th:if="${errorMessage != null}" class="alert alert-danger alert-dismissible fade show" role="alert">
             <span th:text="${errorMessage}"></span>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+        <div th:if="${successMessage != null}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
 
         <form th:action="@{/san-pham-chi-tiet/them-moi}" th:object="${spChiTiet}" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="maSPCT" class="form-label">Mã chi tiết sản phẩm</label>
-                <input type="text" class="form-control" id="maSPCT" th:field="*{maSPCT}" required>
+                <input type="text" class="form-control" id="maSPCT" th:field="*{maSPCT}" required th:errorclass="is-invalid">
+                <div class="invalid-feedback" th:errors="*{maSPCT}"></div>
             </div>
 
             <div class="mb-3">
                 <label for="sanPham" class="form-label">Sản phẩm</label>
-                <select class="form-select" id="sanPham" th:field="*{sanPham}" required>
+                <select class="form-select" id="sanPham" th:field="*{sanPham}" required th:errorclass="is-invalid">
                     <option value="">-- Chọn sản phẩm --</option>
                     <option th:each="sp : ${sanPhams}" th:value="${sp.id}" th:text="${sp.ten}"></option>
                 </select>
+                <div class="invalid-feedback" th:errors="*{sanPham}"></div>
             </div>
 
             <div class="mb-3">
                 <label for="mauSac">Màu sắc</label>
-                <select id="mauSac" th:field="*{mauSac}" class="form-select" required>
-                    <option th:each="ms : ${mauSacs}" th:value="${ms}" th:text="${ms.ten}"></option>
-                </select>
-                <a href="/mau-sac/them" class="btn btn-secondary btn-sm mt-2" target="_blank">➕ Thêm màu sắc</a>
+                <div class="d-flex gap-2">
+                    <select id="mauSac" th:field="*{mauSac}" class="form-select" required th:errorclass="is-invalid">
+                        <option value="">-- Chọn màu sắc --</option> <option th:each="ms : ${mauSacs}" th:value="${ms.id}" th:text="${ms.ten}"></option>
+                    </select>
+                    <div class="invalid-feedback" th:errors="*{mauSac}"></div>
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addMauSacModal">➕</button>
+                </div>
+            </div>
+
+            <div class="modal fade" id="addMauSacModal" tabindex="-1" aria-labelledby="addMauSacModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form id="addMauSacForm" action="/mau-sac/save">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addMauSacModalLabel">Thêm Màu sắc</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="mauSacTen" class="form-label">Tên Màu sắc</label>
+                                    <input type="text" id="mauSacTen" name="ten" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                <button type="submit" class="btn btn-primary">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
 
             <div class="mb-3">
                 <label for="kichThuoc">Kích thước</label>
-                <select id="kichThuoc" th:field="*{kichThuoc}" class="form-select" required>
-                    <option th:each="kt : ${kichThuocs}" th:value="${kt}" th:text="${kt.ten}"></option>
-                </select>
-                <a href="/kich-thuoc/them" class="btn btn-secondary btn-sm mt-2" target="_blank">➕ Thêm kích thước</a>
+                <div class="d-flex gap-2">
+                    <select id="kichThuoc" th:field="*{kichThuoc}" class="form-select" required th:errorclass="is-invalid">
+                        <option value="">-- Chọn kích thước --</option> <option th:each="kt : ${kichThuocs}" th:value="${kt.id}" th:text="${kt.ten}"></option>
+                    </select>
+                    <div class="invalid-feedback" th:errors="*{kichThuoc}"></div>
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addKichThuocModal">➕</button>
+                </div>
+            </div>
+
+            <div class="modal fade" id="addKichThuocModal" tabindex="-1" aria-labelledby="addKichThuocModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form id="addKichThuocForm" action="/kich-thuoc/save">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addKichThuocModalLabel">Thêm Kích thước</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="kichThuocTen" class="form-label">Tên Kích thước</label>
+                                    <input type="text" id="kichThuocTen" name="ten" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                <button type="submit" class="btn btn-primary">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
 
             <div class="mb-3">
                 <label for="thuongHieu">Thương hiệu</label>
-                <select id="thuongHieu" th:field="*{sanPham.thuongHieu}" class="form-select" required>
-                    <option th:each="th : ${sanPhams}" th:value="${th.thuongHieu}" th:text="${th.thuongHieu.ten}"></option>
-                </select>
-                <a href="/thuong-hieu/them" class="btn btn-secondary btn-sm mt-2" target="_blank">➕ Thêm thương hiệu</a>
+                <div class="d-flex gap-2">
+                    <select id="thuongHieu" th:field="*{thuongHieu}" class="form-select" required th:errorclass="is-invalid">
+                        <option value="">-- Chọn thương hiệu --</option> <option th:each="th : ${thuongHieus}" th:value="${th.id}" th:text="${th.ten}"></option>
+                    </select>
+                    <div class="invalid-feedback" th:errors="*{thuongHieu}"></div>
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addThuongHieuModal">➕</button>
+                </div>
+            </div>
+
+            <div class="modal fade" id="addThuongHieuModal" tabindex="-1" aria-labelledby="addThuongHieuModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form id="addThuongHieuForm" action="/thuong-hieu/save">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addThuongHieuModalLabel">Thêm Thương hiệu</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="thuongHieuTen" class="form-label">Tên Thương hiệu</label>
+                                    <input type="text" id="thuongHieuTen" name="ten" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                <button type="submit" class="btn btn-primary">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
 
             <div class="mb-3">
                 <label for="soLuong" class="form-label">Số lượng</label>
-                <input type="number" class="form-control" id="soLuong" th:field="*{soLuong}" min="0" value="0">
+                <input type="number" class="form-control" id="soLuong" th:field="*{soLuong}" min="0" value="0" th:errorclass="is-invalid">
+                <div class="invalid-feedback" th:errors="*{soLuong}"></div>
             </div>
 
             <div class="mb-3">
                 <label for="donGia" class="form-label">Đơn giá (VNĐ)</label>
-                <input type="number" class="form-control" id="donGia" th:field="*{donGia}" min="0" step="1000" required>
+                <input type="number" class="form-control" id="donGia" th:field="*{donGia}" min="0" step="1000" required th:errorclass="is-invalid">
+                <div class="invalid-feedback" th:errors="*{donGia}"></div>
             </div>
 
-            <!-- Phần chọn hình ảnh -->
             <div class="mb-3">
                 <label for="fileHinhAnh" class="form-label">Hình ảnh sản phẩm</label>
                 <input type="file" class="form-control" id="fileHinhAnh" name="fileHinhAnh" accept="image/*" multiple>
                 <div class="form-text">Chọn một hoặc nhiều ảnh (JPEG, PNG...)</div>
 
-                <!-- Hiển thị preview ảnh -->
-                <div id="previewContainer" class="mt-3 d-flex flex-wrap gap-2"></div>
+                <div id="previewContainer" class="mt-3 d-flex flex-wrap gap-2">
+                </div>
             </div>
 
             <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="trangThai" th:field="*{trangThai}" checked>
+                <input type="checkbox" class="form-check-input" id="trangThai" th:field="*{trangThai}">
                 <label class="form-check-label" for="trangThai">Trạng thái hoạt động</label>
             </div>
 
@@ -222,8 +297,17 @@
         </form>
     </div>
 </div>
-<!-- JavaScript để preview ảnh -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
+    // Script cho dropdown sidebar
+    function toggleDropdown(id) {
+        const el = document.getElementById(id);
+        el.classList.toggle("show");
+    }
+
+    // Script cho preview ảnh
     document.getElementById('fileHinhAnh').addEventListener('change', function (event) {
         const previewContainer = document.getElementById('previewContainer');
         previewContainer.innerHTML = ''; // Xóa preview cũ
@@ -235,43 +319,152 @@
                 reader.onload = function (e) {
                     const img = document.createElement('img');
                     img.src = e.target.result;
-                    img.classList.add('img-thumbnail');
-                    img.style.maxHeight = '120px';
-                    img.style.marginRight = '10px';
+                    img.alt = file.name; // Thêm alt text
+                    // Các style cho ảnh đã được chuyển lên CSS
                     previewContainer.appendChild(img);
                 };
                 reader.readAsDataURL(file);
             });
         }
     });
-</script>
-<script>
-    document.getElementById("fileHinhAnh").addEventListener("change", function (event) {
-        const previewContainer = document.getElementById("previewContainer");
-        previewContainer.innerHTML = ""; // Xóa preview cũ
 
-        Array.from(event.target.files).forEach(file => {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const img = document.createElement("img");
-                img.src = e.target.result;
-                img.style.width = "100px";
-                img.style.height = "100px";
-                img.style.objectFit = "cover";
-                img.style.border = "1px solid #ccc";
-                img.style.borderRadius = "8px";
-                previewContainer.appendChild(img);
-            };
-            reader.readAsDataURL(file);
+    // Script xử lý submit Modal Thêm Màu sắc
+    document.getElementById('addMauSacForm').addEventListener('submit', function (e) {
+        e.preventDefault(); // Ngăn form submit theo cách truyền thống
+
+        const formData = new FormData(this);
+        // URL endpoint để lưu Màu sắc mới
+        const url = '/mau-sac/save'; // Đảm bảo URL này đúng với backend của bạn
+
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json()) // Giả định backend trả về JSON
+            .then(data => {
+                // Giả định backend trả về { success: true/false, id: ..., ten: ..., message: ... }
+                if (data.success) {
+                    // Thêm option mới vào dropdown Màu sắc chính
+                    const select = document.getElementById('mauSac');
+                    const option = document.createElement('option');
+                    // Quan trọng: value của option phải là ID trả về từ backend
+                    option.value = data.id;
+                    option.textContent = data.ten; // ten trả về từ backend
+                    select.appendChild(option);
+                    select.value = data.id; // Chọn option vừa thêm
+                    alert('Thêm màu sắc thành công!'); // Thông báo thành công
+
+                    // Đóng modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('addMauSacModal'));
+                    modal.hide();
+
+                    // Xóa nội dung input sau khi thêm
+                    document.getElementById('mauSacTen').value = '';
+
+                } else {
+                    // Xử lý lỗi từ backend
+                    alert('Lỗi khi thêm màu sắc: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Đã xảy ra lỗi trong quá trình gửi dữ liệu.');
+            });
+    });
+
+    // Script xử lý submit Modal Thêm Kích thước
+    document.getElementById('addKichThuocForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const url = '/kich-thuoc/save'; // Đảm bảo URL này đúng
+
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const select = document.getElementById('kichThuoc');
+                    const option = document.createElement('option');
+                    // Quan trọng: value của option phải là ID trả về từ backend
+                    option.value = data.id;
+                    option.textContent = data.ten;
+                    select.appendChild(option);
+                    select.value = data.id;
+                    alert('Thêm kích thước thành công!');
+
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('addKichThuocModal'));
+                    modal.hide();
+
+                    document.getElementById('kichThuocTen').value = '';
+
+                } else {
+                    alert('Lỗi khi thêm kích thước: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Đã xảy ra lỗi trong quá trình gửi dữ liệu.');
+            });
+    });
+
+    // Script xử lý submit Modal Thêm Thương hiệu
+    document.getElementById('addThuongHieuForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const url = '/thuong-hieu/them'; // Đảm bảo URL này đúng
+
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const select = document.getElementById('thuongHieu');
+                    const option = document.createElement('option');
+                    // Quan trọng: value của option phải là ID trả về từ backend
+                    option.value = data.id;
+                    option.textContent = data.ten;
+                    select.appendChild(option);
+                    select.value = data.id;
+                    alert('Thêm thương hiệu thành công!');
+
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('addThuongHieuModal'));
+                    modal.hide();
+
+                    document.getElementById('thuongHieuTen').value = '';
+
+                } else {
+                    alert('Lỗi khi thêm thương hiệu: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Đã xảy ra lỗi trong quá trình gửi dữ liệu.');
+            });
+    });
+
+    // Script để đóng alert message sau vài giây (tùy chọn)
+    // Thêm đoạn script này vào sau các script khác
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            // Đóng alert sau 5 giây (5000 milliseconds)
+            if (!alert.classList.contains('alert-dismissible')) { // Chỉ đóng alert không có nút đóng
+                setTimeout(() => {
+                    const bootstrapAlert = new bootstrap.Alert(alert);
+                    bootstrapAlert.close();
+                }, 5000);
+            }
         });
     });
+
+
 </script>
-<script>
-    function toggleDropdown(id) {
-        const el = document.getElementById(id);
-        el.classList.toggle("show");
-    }
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

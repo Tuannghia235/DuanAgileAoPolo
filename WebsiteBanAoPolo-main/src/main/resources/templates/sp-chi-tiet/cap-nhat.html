@@ -145,25 +145,107 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Màu sắc</label>
-                <select class="form-select" th:field="*{mauSac}" required>
-                    <option value="">-- Chọn màu sắc --</option>
-                    <option th:each="ms : ${mauSacs}" th:value="${ms.id}" th:text="${ms.ten}"></option>
-                </select>
+                <label for="mauSac">Màu sắc</label>
+                <div class="d-flex gap-2">
+                    <select id="mauSac" th:field="*{mauSac}" class="form-select" required th:errorclass="is-invalid">
+                        <option value="">-- Chọn màu sắc --</option> <option th:each="ms : ${mauSacs}" th:value="${ms.id}" th:text="${ms.ten}"></option>
+                    </select>
+                    <div class="invalid-feedback" th:errors="*{mauSac}"></div>
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addMauSacModal">➕</button>
+                </div>
+            </div>
+
+            <div class="modal fade" id="addMauSacModal" tabindex="-1" aria-labelledby="addMauSacModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form id="addMauSacForm">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addMauSacModalLabel">Thêm Màu sắc</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="mauSacTen" class="form-label">Tên Màu sắc</label>
+                                    <input type="text" id="mauSacTen" name="ten" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                <button type="submit" class="btn btn-primary">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Kích thước</label>
-                <select class="form-select" th:field="*{kichThuoc}" required>
-                    <option value="">-- Chọn kích thước --</option>
-                    <option th:each="kt : ${kichThuocs}" th:value="${kt.id}" th:text="${kt.ten}"></option>
-                </select>
+                <label for="kichThuoc">Kích thước</label>
+                <div class="d-flex gap-2">
+                    <select id="kichThuoc" th:field="*{kichThuoc}" class="form-select" required th:errorclass="is-invalid">
+                        <option value="">-- Chọn kích thước --</option> <option th:each="kt : ${kichThuocs}" th:value="${kt.id}" th:text="${kt.ten}"></option>
+                    </select>
+                    <div class="invalid-feedback" th:errors="*{kichThuoc}"></div>
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addKichThuocModal">➕</button>
+                </div>
+            </div>
+
+            <div class="modal fade" id="addKichThuocModal" tabindex="-1" aria-labelledby="addKichThuocModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form id="addKichThuocForm">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addKichThuocModalLabel">Thêm Kích thước</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="kichThuocTen" class="form-label">Tên Kích thước</label>
+                                    <input type="text" id="kichThuocTen" name="ten" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                <button type="submit" class="btn btn-primary">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Số lượng</label>
-                <input type="number" class="form-control" th:field="*{soLuong}" min="0">
+                <label for="thuongHieu">Thương hiệu</label>
+                <div class="d-flex gap-2">
+                    <select id="thuongHieu" th:field="*{thuongHieu}" class="form-select" required th:errorclass="is-invalid">
+                        <option value="">-- Chọn thương hiệu --</option> <option th:each="th : ${thuongHieus}" th:value="${th.id}" th:text="${th.ten}"></option>
+                    </select>
+                    <div class="invalid-feedback" th:errors="*{thuongHieu}"></div>
+                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#addThuongHieuModal">➕</button>
+                </div>
             </div>
+
+            <div class="modal fade" id="addThuongHieuModal" tabindex="-1" aria-labelledby="addThuongHieuModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form id="addThuongHieuForm">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addThuongHieuModalLabel">Thêm Thương hiệu</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="thuongHieuTen" class="form-label">Tên Thương hiệu</label>
+                                    <input type="text" id="thuongHieuTen" name="ten" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                <button type="submit" class="btn btn-primary">Lưu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
 
             <div class="mb-3">
                 <label class="form-label">Đơn giá (VNĐ)</label>
@@ -255,6 +337,141 @@
             reader.readAsDataURL(file);
         }
     });
+    // Script xử lý submit Modal Thêm Màu sắc
+    document.getElementById('addMauSacForm').addEventListener('submit', function (e) {
+        e.preventDefault(); // Ngăn form submit theo cách truyền thống
+
+        const formData = new FormData(this);
+        // URL endpoint để lưu Màu sắc mới
+        const url = '/mau-sac/save'; // Đảm bảo URL này đúng với backend của bạn
+
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json()) // Giả định backend trả về JSON
+            .then(data => {
+                // Giả định backend trả về { success: true/false, id: ..., ten: ..., message: ... }
+                if (data.success) {
+                    // Thêm option mới vào dropdown Màu sắc chính
+                    const select = document.getElementById('mauSac');
+                    const option = document.createElement('option');
+                    // Quan trọng: value của option phải là ID trả về từ backend
+                    option.value = data.id;
+                    option.textContent = data.ten; // ten trả về từ backend
+                    select.appendChild(option);
+                    select.value = data.id; // Chọn option vừa thêm
+                    alert('Thêm màu sắc thành công!'); // Thông báo thành công
+
+                    // Đóng modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('addMauSacModal'));
+                    modal.hide();
+
+                    // Xóa nội dung input sau khi thêm
+                    document.getElementById('mauSacTen').value = '';
+
+                } else {
+                    // Xử lý lỗi từ backend
+                    alert('Lỗi khi thêm màu sắc: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Đã xảy ra lỗi trong quá trình gửi dữ liệu.');
+            });
+    });
+
+    // Script xử lý submit Modal Thêm Kích thước
+    document.getElementById('addKichThuocForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const url = '/kich-thuoc/save'; // Đảm bảo URL này đúng
+
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const select = document.getElementById('kichThuoc');
+                    const option = document.createElement('option');
+                    // Quan trọng: value của option phải là ID trả về từ backend
+                    option.value = data.id;
+                    option.textContent = data.ten;
+                    select.appendChild(option);
+                    select.value = data.id;
+                    alert('Thêm kích thước thành công!');
+
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('addKichThuocModal'));
+                    modal.hide();
+
+                    document.getElementById('kichThuocTen').value = '';
+
+                } else {
+                    alert('Lỗi khi thêm kích thước: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Đã xảy ra lỗi trong quá trình gửi dữ liệu.');
+            });
+    });
+
+    // Script xử lý submit Modal Thêm Thương hiệu
+    document.getElementById('addThuongHieuForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const formData = new FormData(this);
+        const url = '/thuong-hieu/them'; // Đảm bảo URL này đúng
+
+        fetch(url, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const select = document.getElementById('thuongHieu');
+                    const option = document.createElement('option');
+                    // Quan trọng: value của option phải là ID trả về từ backend
+                    option.value = data.id;
+                    option.textContent = data.ten;
+                    select.appendChild(option);
+                    select.value = data.id;
+                    alert('Thêm thương hiệu thành công!');
+
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('addThuongHieuModal'));
+                    modal.hide();
+
+                    document.getElementById('thuongHieuTen').value = '';
+
+                } else {
+                    alert('Lỗi khi thêm thương hiệu: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Đã xảy ra lỗi trong quá trình gửi dữ liệu.');
+            });
+    });
+
+    // Script để đóng alert message sau vài giây (tùy chọn)
+    // Thêm đoạn script này vào sau các script khác
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            // Đóng alert sau 5 giây (5000 milliseconds)
+            if (!alert.classList.contains('alert-dismissible')) { // Chỉ đóng alert không có nút đóng
+                setTimeout(() => {
+                    const bootstrapAlert = new bootstrap.Alert(alert);
+                    bootstrapAlert.close();
+                }, 5000);
+            }
+        });
+    });
+
 </script>
 
 <script>

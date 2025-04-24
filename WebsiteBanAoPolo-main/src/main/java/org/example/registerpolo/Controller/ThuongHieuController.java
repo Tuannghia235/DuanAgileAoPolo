@@ -1,5 +1,6 @@
 package org.example.registerpolo.Controller;
 
+import org.example.registerpolo.Entity.KichThuoc;
 import org.example.registerpolo.Entity.ThuongHieu;
 import org.example.registerpolo.Repository.ThuongHieuRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,7 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/thuong-hieu")
@@ -33,6 +36,22 @@ public class ThuongHieuController {
     public String createThuongHieu(@ModelAttribute ThuongHieu thuongHieu) {
         thuongHieuRepository.save(thuongHieu);
         return "redirect:/thuong-hieu";
+    }
+
+    @PostMapping("/save")
+    @ResponseBody
+    public Map<String, Object> saveThuongHieu(@ModelAttribute ThuongHieu thuongHieu) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            ThuongHieu savedThuongHieu = thuongHieuRepository.save(thuongHieu);
+            response.put("success", true);
+            response.put("id", savedThuongHieu.getId());
+            response.put("ten", savedThuongHieu.getTen());
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", e.getMessage());
+        }
+        return response;
     }
 
     @GetMapping("/sua/{id}")

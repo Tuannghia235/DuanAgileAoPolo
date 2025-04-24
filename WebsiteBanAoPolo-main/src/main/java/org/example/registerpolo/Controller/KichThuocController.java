@@ -8,6 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 @RequestMapping("/kich-thuoc")
 public class KichThuocController {
@@ -29,9 +32,19 @@ public class KichThuocController {
     }
 
     @PostMapping("/save")
-    public String save(@ModelAttribute KichThuoc kichThuoc) {
-        kichThuocRepository.save(kichThuoc);
-        return "redirect:/kich-thuoc?success=Thành công";
+    @ResponseBody
+    public Map<String, Object> saveKichThuoc(@ModelAttribute KichThuoc kichThuoc) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            KichThuoc savedKichThuoc = kichThuocRepository.save(kichThuoc);
+            response.put("success", true);
+            response.put("id", savedKichThuoc.getId());
+            response.put("ten", savedKichThuoc.getTen());
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("message", e.getMessage());
+        }
+        return response;
     }
 
     @GetMapping("/sua/{id}")
