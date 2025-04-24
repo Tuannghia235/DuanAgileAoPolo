@@ -176,7 +176,7 @@
             <div class="modal fade" id="addMauSacModal" tabindex="-1" aria-labelledby="addMauSacModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form id="addMauSacForm" action="/mau-sac/save">
+                        <form id="addMauSacForm" action="/mau-sac/save-ajax">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="addMauSacModalLabel">Thêm Màu sắc</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -210,7 +210,7 @@
             <div class="modal fade" id="addKichThuocModal" tabindex="-1" aria-labelledby="addKichThuocModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form id="addKichThuocForm" action="/kich-thuoc/save">
+                        <form id="addKichThuocForm" action="/kich-thuoc/save-ajax">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="addKichThuocModalLabel">Thêm Kích thước</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -244,7 +244,7 @@
             <div class="modal fade" id="addThuongHieuModal" tabindex="-1" aria-labelledby="addThuongHieuModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        <form id="addThuongHieuForm" action="/thuong-hieu/save">
+                        <form id="addThuongHieuForm" action="/thuong-hieu/save-ajax">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="addThuongHieuModalLabel">Thêm Thương hiệu</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -334,7 +334,7 @@
 
         const formData = new FormData(this);
         // URL endpoint để lưu Màu sắc mới
-        const url = '/mau-sac/save'; // Đảm bảo URL này đúng với backend của bạn
+        const url = '/mau-sac/save-ajax'; // Đảm bảo URL này đúng với backend của bạn
 
         fetch(url, {
             method: 'POST',
@@ -377,7 +377,7 @@
         e.preventDefault();
 
         const formData = new FormData(this);
-        const url = '/kich-thuoc/save'; // Đảm bảo URL này đúng
+        const url = '/kich-thuoc/save-ajax'; // Đảm bảo URL này đúng
 
         fetch(url, {
             method: 'POST',
@@ -415,7 +415,7 @@
         e.preventDefault();
 
         const formData = new FormData(this);
-        const url = '/thuong-hieu/them'; // Đảm bảo URL này đúng
+        const url = '/thuong-hieu/save-ajax'; // Đảm bảo URL này đúng
 
         fetch(url, {
             method: 'POST',

@@ -202,69 +202,56 @@ public class SPChiTietController {
     @PostMapping("/sua/{id}")
     public String capNhatSanPhamChiTiet(
             @PathVariable("id") Integer id,
-            @ModelAttribute("spChiTiet") SPChiTiet spChiTiet, // Đối tượng nhận dữ liệu từ form
-            @RequestParam(name = "files", required = false) MultipartFile[] files, // Ảnh mới upload
-            @RequestParam(name = "xoaAnhIds", required = false) List<Integer> xoaAnhIds, // IDs ảnh cũ muốn xóa
+            @ModelAttribute("spChiTiet") SPChiTiet spChiTiet,
+            @RequestParam(name = "files", required = false) MultipartFile[] files,
+            @RequestParam(name = "xoaAnhIds", required = false) List<Integer> xoaAnhIds,
             RedirectAttributes redirectAttributes) {
 
         try {
-            // 1. Lấy bản ghi HIỆN TẠI từ DB
             SPChiTiet spChiTietDB = spChiTietRepo.findById(id).orElse(null);
             if (spChiTietDB == null) {
                 redirectAttributes.addFlashAttribute("errorMessage", "Không tìm thấy sản phẩm chi tiết để cập nhật!");
                 return "redirect:/san-pham-chi-tiet";
             }
 
-            // 2. Cập nhật thông tin cơ bản từ đối tượng form attribute (spChiTiet) sang đối tượng DB (spChiTietDB)
-            spChiTietDB.setMaSPCT(spChiTiet.getMaSPCT());
-            spChiTietDB.setSanPham(spChiTiet.getSanPham()); // Cần đảm bảo form gửi về đúng đối tượng SanPham/ID
-            spChiTietDB.setMauSac(spChiTiet.getMauSac()); // Cần đảm bảo form gửi về đúng đối tượng MauSac/ID
-            spChiTietDB.setKichThuoc(spChiTiet.getKichThuoc()); // Cần đảm bảo form gửi về đúng đối tượng KichThuoc/ID
+            // Update fields
+            spChiTietDB.setSanPham(spChiTiet.getSanPham());
+            spChiTietDB.setMauSac(spChiTiet.getMauSac());
+            spChiTietDB.setKichThuoc(spChiTiet.getKichThuoc());
             spChiTietDB.setSoLuong(spChiTiet.getSoLuong());
             spChiTietDB.setDonGia(spChiTiet.getDonGia());
             spChiTietDB.setTrangThai(spChiTiet.getTrangThai());
 
-            // 3. Xóa ảnh cũ nếu có chọn
+            // Delete old images
             if (xoaAnhIds != null && !xoaAnhIds.isEmpty()) {
                 List<HinhAnhSPChiTiet> anhCanXoa = hinhAnhRepo.findAllById(xoaAnhIds);
                 for (HinhAnhSPChiTiet anh : anhCanXoa) {
-                    // Xóa file vật lý
-                    xoaFile(anh.getUrl()); // Sử dụng helper method đã sửa (hoặc code trực tiếp ClassPathResource)
-                    hinhAnhRepo.delete(anh); // Xóa khỏi DB
+                    xoaFile(anh.getUrl());
+                    hinhAnhRepo.delete(anh);
                 }
             }
 
-            // 4. Lưu ảnh mới nếu có
+            // Save new images
             if (files != null && files.length > 0) {
                 String staticImagePath = new ClassPathResource("static/image").getFile().getAbsolutePath();
-                File dir = new File(staticImagePath);
-                if (!dir.exists()) {
-                    dir.mkdirs();
-                }
-
                 for (MultipartFile file : files) {
                     if (!file.isEmpty()) {
                         String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
                         Path uploadPath = Paths.get(staticImagePath, fileName);
                         file.transferTo(uploadPath.toFile());
 
-                        // Lưu thông tin ảnh vào DB và liên kết với SPCT TỪ DB (spChiTietDB)
                         HinhAnhSPChiTiet hinhAnh = new HinhAnhSPChiTiet();
-                        hinhAnh.setSpChiTiet(spChiTietDB); // Liên kết với đối tượng SPCT từ DB
+                        hinhAnh.setSpChiTiet(spChiTietDB);
                         hinhAnh.setUrl("/image/" + fileName);
-                        hinhAnh.setMoTa("Ảnh sản phẩm " + spChiTietDB.getMaSPCT()); // Sử dụng mã từ spChiTietDB
-                        hinhAnh.setTrangThai(true);
                         hinhAnhRepo.save(hinhAnh);
                     }
                 }
             }
 
-            // 5. Lưu thay đổi vào DB (lưu đối tượng spChiTietDB đã được cập nhật)
-            spChiTietRepo.save(spChiTietDB); // Lưu đối tượng từ DB sau khi đã cập nhật thông tin và xử lý ảnh
-
+            spChiTietRepo.save(spChiTietDB);
             redirectAttributes.addFlashAttribute("successMessage", "Cập nhật chi tiết sản phẩm thành công!");
         } catch (Exception e) {
-            e.printStackTrace(); // In lỗi để debug
+            e.printStackTrace();
             redirectAttributes.addFlashAttribute("errorMessage", "Có lỗi xảy ra khi cập nhật chi tiết sản phẩm: " + e.getMessage());
         }
 

@@ -32,13 +32,13 @@ public class ThuongHieuController {
         return "thuong-hieu/them";
     }
 
-    @PostMapping("/them")
+    @PostMapping("/save")
     public String createThuongHieu(@ModelAttribute ThuongHieu thuongHieu) {
         thuongHieuRepository.save(thuongHieu);
         return "redirect:/thuong-hieu";
     }
 
-    @PostMapping("/save")
+    @PostMapping("/save-ajax")
     @ResponseBody
     public Map<String, Object> saveThuongHieu(@ModelAttribute ThuongHieu thuongHieu) {
         Map<String, Object> response = new HashMap<>();

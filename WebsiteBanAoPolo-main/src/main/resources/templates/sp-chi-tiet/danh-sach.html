@@ -102,6 +102,10 @@
             margin-bottom: 5px; /* Khoảng cách giữa select và link */
         }
 
+        .content-section nav .pagination {
+            margin-top: 20px; /* Thêm khoảng cách trên cho phân trang */
+            justify-content: center; /* Căn giữa phân trang */
+        }
 
     </style>
 </head>
@@ -253,7 +257,20 @@
             </tr>
             </tbody>
         </table>
-
+        <nav th:if="${!spChiTiets.isEmpty()}">
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${spChiTiets.hasPrevious()} ? '' : 'disabled'">
+                    <a class="page-link" th:href="@{/san-pham-chi-tiet(page=${spChiTiets.number - 1}, search=${search}, mauSacId=${mauSacId}, kichThuocId=${kichThuocId}, thuongHieuId=${thuongHieuId})}">Trước</a>
+                </li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, spChiTiets.totalPages - 1)}"
+                    th:classappend="${i == spChiTiets.number} ? 'active'">
+                    <a class="page-link" th:href="@{/san-pham-chi-tiet(page=${i}, search=${search}, mauSacId=${mauSacId}, kichThuocId=${kichThuocId}, thuongHieuId=${thuongHieuId})}" th:text="${i + 1}"></a>
+                </li>
+                <li class="page-item" th:classappend="${spChiTiets.hasNext()} ? '' : 'disabled'">
+                    <a class="page-link" th:href="@{/san-pham-chi-tiet(page=${spChiTiets.number + 1}, search=${search}, mauSacId=${mauSacId}, kichThuocId=${kichThuocId}, thuongHieuId=${thuongHieuId})}">Tiếp</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>
 <script>

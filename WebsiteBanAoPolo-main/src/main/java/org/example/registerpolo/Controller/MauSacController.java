@@ -31,8 +31,13 @@ public class MauSacController {
         model.addAttribute("mauSac", new MauSac());
         return "mau-sac/form";
     }
-
     @PostMapping("/save")
+    public String luuMauSac(@ModelAttribute MauSac mauSac, RedirectAttributes redirectAttributes) {
+        repo.save(mauSac);
+        redirectAttributes.addFlashAttribute("success", "Lưu thành công!");
+        return "redirect:/mau-sac";
+    }
+    @PostMapping("/save-ajax")
     @ResponseBody
     public Map<String, Object> saveMauSac(@ModelAttribute MauSac mauSac) {
         Map<String, Object> response = new HashMap<>();

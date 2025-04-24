@@ -32,6 +32,11 @@ public class KichThuocController {
     }
 
     @PostMapping("/save")
+    public String save(@ModelAttribute KichThuoc kichThuoc) {
+        kichThuocRepository.save(kichThuoc);
+        return "redirect:/kich-thuoc?success=Thành công";
+    }
+    @PostMapping("/save-ajax")
     @ResponseBody
     public Map<String, Object> saveKichThuoc(@ModelAttribute KichThuoc kichThuoc) {
         Map<String, Object> response = new HashMap<>();
