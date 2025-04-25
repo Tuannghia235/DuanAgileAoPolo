@@ -9,7 +9,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-// import java.util.Optional; // Không cần import Optional vì findById đã có sẵn
 
 @Repository
 public interface SPChiTietRepo extends JpaRepository<SPChiTiet, Integer> {
@@ -27,13 +26,15 @@ public interface SPChiTietRepo extends JpaRepository<SPChiTiet, Integer> {
                                   @Param("mau") Integer mau,
                                   @Param("size") Integer size);
 
-    // Query tìm kiếm và lọc chính cho trang danh sách (đã bao gồm thuongHieuId)
+    // Query tìm kiếm và lọc chính cho trang danh sách (đã bao gồm thuongHieuId và lọc theo sanPham.trangThai)
     @Query("SELECT sp FROM SPChiTiet sp JOIN FETCH sp.sanPham p JOIN FETCH p.thuongHieu th JOIN FETCH sp.mauSac ms JOIN FETCH sp.kichThuoc kt WHERE " +
+            "p.trangThai = true AND " + // <-- THÊM ĐIỀU KIỆN LỌC Ở ĐÂY
             "(:search IS NULL OR LOWER(sp.maSPCT) LIKE LOWER(CONCAT('%', :search, '%')) " +
             "OR LOWER(p.ten) LIKE LOWER(CONCAT('%', :search, '%'))) AND " +
             "(:mauSacId IS NULL OR ms.id = :mauSacId) AND " +
             "(:kichThuocId IS NULL OR kt.id = :kichThuocId) AND " +
             "(:thuongHieuId IS NULL OR th.id = :thuongHieuId)")
+
     Page<SPChiTiet> findAllWithFilters(@Param("search") String search,
                                        @Param("mauSacId") Integer mauSacId,
                                        @Param("kichThuocId") Integer kichThuocId,
@@ -41,23 +42,29 @@ public interface SPChiTietRepo extends JpaRepository<SPChiTiet, Integer> {
                                        Pageable pageable);
 
     // Query lọc với logic OR và lọc theo tên (giữ nguyên theo yêu cầu)
-    @Query("SELECT sp FROM SPChiTiet sp " +
-            "WHERE " +
-            "(:thuongHieuId IS NOT NULL AND sp.sanPham.thuongHieu.id = :thuongHieuId) OR " +
+    // Lưu ý: Query này KHÔNG tự động lọc theo p.trangThai = true trừ khi bạn thêm nó vào đây nếu cần
+    @Query("SELECT sp FROM SPChiTiet sp JOIN sp.sanPham p WHERE " + // Thêm JOIN tới SanPham để có thể lọc nếu cần
+            "(" + // Bọc các điều kiện OR trong ngoặc đơn
+            "(:thuongHieuId IS NOT NULL AND p.thuongHieu.id = :thuongHieuId) OR " +
             "(:gia IS NOT NULL AND " +
             "   ((:gia = '1' AND sp.donGia < 500000) OR " +
             "    (:gia = '2' AND sp.donGia BETWEEN 500000 AND 1000000) OR " +
             "    (:gia = '3' AND sp.donGia > 1000000)) ) OR " +
-            "(:trangThai IS NOT NULL AND sp.trangThai = :trangThai) OR " +
+            "(:trangThaiSPCT IS NOT NULL AND sp.trangThai = :trangThaiSPCT) OR " + // Đổi tên param tránh trùng với thuộc tính
             "(:size IS NOT NULL AND sp.kichThuoc.ten = :size) OR " +
-            "(:mauSac IS NOT NULL AND sp.mauSac.ten = :mauSac)")
+            "(:mauSac IS NOT NULL AND sp.mauSac.ten = :mauSac)" +
+            ")"
+            // Nếu muốn query `locSanPham` cũng chỉ lấy sản phẩm hoạt động, thêm dòng dưới:
+            // + " AND p.trangThai = true"
+    )
     Page<SPChiTiet> locSanPham(@Param("thuongHieuId") Integer thuongHieuId,
                                @Param("gia") String gia,
-                               @Param("trangThai") Boolean trangThai,
+                               @Param("trangThaiSPCT") Boolean trangThaiSPCT, // Đổi tên param
                                @Param("size") String size,
                                @Param("mauSac") String mauSac,
                                Pageable pageable);
 
+    List<SPChiTiet> findByTrangThaiTrue();
     // Các phương thức liên quan đến HinhAnhSPChiTiet nên nằm trong HinhAnhSPChiTietRepo
     // Ví dụ: List<HinhAnhSPChiTiet> findBySpChiTiet_Id(Integer spctId); (Trong HinhAnhSPChiTietRepo)
 }

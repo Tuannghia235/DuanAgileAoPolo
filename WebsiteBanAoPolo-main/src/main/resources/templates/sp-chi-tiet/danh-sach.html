@@ -149,8 +149,8 @@
     <div class="container mt-4">
         <form method="get" class="mb-3">
             <div class="row g-2 align-items-end"> <div class="col-md-4">
-                <label for="search" class="form-label">Tìm kiếm tên SPCT</label>
-                <input type="text" id="search" name="search" class="form-control" placeholder="Tìm kiếm theo mã hoặc tên SP"
+                <label for="search" class="form-label">Tìm kiếm mã SPCT</label>
+                <input type="text" id="search" name="search" class="form-control" placeholder="Tìm kiếm theo mã spct"
                        th:value="${search}">
             </div>
                 <div class="col-md-auto"> <label class="form-label">.</label> <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
@@ -232,6 +232,7 @@
             </thead>
             <tbody>
             <tr th:unless="${spChiTiets.isEmpty()}" th:each="spct : ${spChiTiets.getContent()}">
+
                 <td th:text="${spct.maSPCT}"></td>
                 <td th:text="${spct.sanPham != null ? spct.sanPham.ten : ''}"></td>
                 <td th:text="${spct.mauSac != null ? spct.mauSac.ten : ''}"></td>

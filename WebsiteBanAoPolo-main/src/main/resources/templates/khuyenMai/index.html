@@ -181,6 +181,16 @@
             <a class="btn btn-success" th:href="@{/khuyen-mai/them}">➕ Thêm mới</a>
         </div>
 
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
         <div class="table-responsive">
             <table class="table table-bordered table-striped shadow-sm">
                 <thead>
@@ -207,8 +217,10 @@
                     </td>
                     <td>
                         <a th:href="@{/khuyen-mai/sua/{id}(id=${km.id})}" class="btn btn-warning btn-sm">Sửa</a>
-                        <a th:href="@{/khuyen-mai/xoa/{id}(id=${km.id})}" class="btn btn-danger btn-sm"
-                           onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</a>
+                        <form th:action="@{/khuyen-mai/xoa/{id}(id=${km.id})}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Xác nhận xóa?')">Xóa</button>
+                        </form>
+
                     </td>
                 </tr>
                 </tbody>
